@@ -356,6 +356,8 @@
             'Admin': 'Ludmila76'
         };
 
+        const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
+
         // Función para cargar el archivo JSON
         async function loadInventory() {
             try {
@@ -376,9 +378,39 @@
             }
         }
 
-        // Cargar el inventario cuando la página se carga
-        document.addEventListener('DOMContentLoaded', loadInventory);
+        // Función para verificar y restaurar la sesión
+        function checkSession() {
+            const storedSession = localStorage.getItem('session');
+            if (storedSession) {
+                const session = JSON.parse(storedSession);
+                const currentTime = new Date().getTime();
+                if (currentTime - session.timestamp < SESSION_DURATION) {
+                    // La sesión es válida, restaurar el panel
+                    loadInventory().then(() => {
+                        showPanel(session.username);
+                    });
+                } else {
+                    // La sesión ha expirado
+                    alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
+                    logout();
+                }
+            }
+        }
 
+        // Función para mostrar el panel correcto
+        function showPanel(username) {
+            document.getElementById('auth-container').classList.add('hidden');
+            if (username === 'Isaac') {
+                document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
+                document.getElementById('vendedor-panel').classList.remove('hidden');
+                renderInventario();
+            } else if (username === 'Admin') {
+                document.getElementById('admin-welcome-message').textContent = `Hola, ${username}!`;
+                document.getElementById('admin-panel').classList.remove('hidden');
+                renderAdminPanel();
+            }
+        }
+        
         // Funciones del Vendedor
         function renderInventario() {
             const content = document.getElementById('vendedor-content');
@@ -637,16 +669,12 @@
             const password = document.getElementById('password').value;
 
             if (users[username] === password) {
-                document.getElementById('auth-container').classList.add('hidden');
-                if (username === 'Isaac') {
-                    document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
-                    document.getElementById('vendedor-panel').classList.remove('hidden');
-                    renderInventario();
-                } else if (username === 'Admin') {
-                    document.getElementById('admin-welcome-message').textContent = `Hola, ${username}!`;
-                    document.getElementById('admin-panel').classList.remove('hidden');
-                    renderAdminPanel();
-                }
+                const sessionData = {
+                    username: username,
+                    timestamp: new Date().getTime()
+                };
+                localStorage.setItem('session', JSON.stringify(sessionData));
+                showPanel(username);
             } else {
                 alert('Usuario o contraseña incorrectos.');
             }
@@ -661,6 +689,7 @@
         });
 
         function logout() {
+            localStorage.removeItem('session');
             document.getElementById('auth-container').classList.remove('hidden');
             document.getElementById('vendedor-panel').classList.add('hidden');
             document.getElementById('admin-panel').classList.add('hidden');
@@ -677,6 +706,11 @@
         document.getElementById('btn-editar-inventario').addEventListener('click', () => renderEditarInventario());
         document.getElementById('btn-cargar-entrega').addEventListener('click', () => renderCargarRegistro('entrega'));
         document.getElementById('btn-cargar-baja').addEventListener('click', () => renderCargarRegistro('baja'));
+
+        // Cargar el inventario y verificar la sesión al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+        });
     </script>
 </body>
 </html>
