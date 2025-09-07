@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestión de Inventario</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    .hidden { display: none; }
+    .btn { padding: 5px 10px; margin: 5px; cursor: pointer; }
+    .baja { background-color: red; color: white; }
+    .entrega { background-color: green; color: white; }
+    .panel { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
+    input[type="text"] { width: 300px; padding: 5px; }
+  </style>
+</head>
+<body>
+
+<h2>Inicio de sesión</h2>
+<select id="usuarioSelect">
+  <option value="">Selecciona usuario</option>
+  <option value="usuario1">usuario1</option>
+  <option value="usuario2">usuario2</option>
+  <option value="usuario3">usuario3</option>
+  <option value="usuario4">usuario4</option>
+  <option value="usuario5">usuario5</option>
+  <option value="admin">admin</option>
+</select>
+<input type="password" id="adminPass" placeholder="Contraseña (solo admin)" />
+<button onclick="login()">Entrar</button>
+
+<div id="app" class="hidden">
+  <h3 id="nombreUsuario"></h3>
+  <button class="btn" onclick="mostrarEntrega()">Entrega</button>
+  <span>Total: $<span id="totalEntrega">0</span></span>
+  <button class="btn" onclick="mostrarBajas()">Baja defecto</button>
+  <button class="btn" onclick="mostrarInventario()">Inventario general</button>
+  <br><br>
+  <input type="text" id="busqueda" placeholder="Buscar por nombre o precio" oninput="buscarProducto()" />
+  <div id="resultados"></div>
+</div>
+
+<div id="panelEntrega" class="panel hidden">
+  <h4>Productos en entrega</h4>
+  <ul id="listaEntrega"></ul>
+  <button onclick="generarEntrega()">Generar entrega</button>
+</div>
+
+<div id="panelBajas" class="panel hidden">
+  <h4>Productos en baja</h4>
+  <ul id="listaBajas"></ul>
+</div>
+
+<div id="panelInventario" class="panel hidden">
+  <h4>Inventario general</h4>
+  <ul id="listaInventario"></ul>
+</div>
+
+<div id="panelAdmin" class="panel hidden">
+  <h3>Panel de administrador</h3>
+  <h4>Historial de entregas</h4>
+  <ul><li>Entrega usuario1 - PDF [descargar]</li></ul>
+  <h4>Historial de bajas</h4>
+  <ul><li>Producto X - <button>Aprobar</button></li></ul>
+  <h4>Editar inventario</h4>
+  <select><option>usuario1</option><option>usuario2</option></select>
+</div>
+
+<script>
+  const inventarios = {
+    usuario1: [{ nombre: "Manzana", precio: 1, cantidad: 10 }, { nombre: "Pan", precio: 2, cantidad: 5 }],
+    usuario2: [{ nombre: "Leche", precio: 3, cantidad: 8 }],
+    usuario3: [{ nombre: "Arroz", precio: 1.5, cantidad: 20 }],
+    usuario4: [{ nombre: "Huevos", precio: 2.5, cantidad: 12 }],
+    usuario5: [{ nombre: "Queso", precio: 4, cantidad: 6 }]
+  };
+
+  let usuarioActual = "";
+  let entrega = [];
+  let bajas = [];
+
+  function login() {
+    const user = document.getElementById("usuarioSelect").value;
+    const pass = document.getElementById("adminPass").value;
+    if (user === "admin" && pass !== "Ludmila76") {
+      alert("Contraseña incorrecta");
+      return;
+    }
+    usuarioActual = user;
+    document.getElementById("nombreUsuario").innerText = "Usuario: " + user;
+    document.getElementById("app").classList.remove("hidden");
+    if (user === "admin") document.getElementById("panelAdmin").classList.remove("hidden");
+  }
+
+  function buscarProducto() {
+    const query = document.getElementById("busqueda").value.toLowerCase();
+    const contenedor = document.getElementById("resultados");
+    contenedor.innerHTML = "";
+    const productos = inventarios[usuarioActual] || [];
+    productos.forEach((p, i) => {
+      if (p.nombre.toLowerCase().includes(query) || p.precio.toString().includes(query)) {
+        const div = document.createElement("div");
+        div.innerHTML = `${p.nombre} - $${p.precio} (${p.cantidad}) 
+          <button class="entrega" onclick="agregarEntrega(${i})">Agregar</button>
+          <button class="baja" onclick="agregarBaja(${i})">Baja</button>`;
+        contenedor.appendChild(div);
+      }
+    });
+  }
+
+  function agregarEntrega(i) {
+    const producto = inventarios[usuarioActual][i];
+    entrega.push(producto);
+    actualizarEntrega();
+  }
+
+  function agregarBaja(i) {
+    const producto = inventarios[usuarioActual][i];
+    bajas.push(producto);
+    actualizarBajas();
+  }
+
+  function actualizarEntrega() {
+    const lista = document.getElementById("listaEntrega");
+    lista.innerHTML = "";
+    let total = 0;
+    entrega.forEach(p => {
+      total += p.precio;
+      const li = document.createElement("li");
+      li.innerText = `${p.nombre} - $${p.precio}`;
+      lista.appendChild(li);
+    });
+    document.getElementById("totalEntrega").innerText = total.toFixed(2);
+  }
+
+  function actualizarBajas() {
+    const lista = document.getElementById("listaBajas");
+    lista.innerHTML = "";
+    bajas.forEach(p => {
+      const li = document.createElement("li");
+      li.innerText = `${p.nombre} - $${p.precio}`;
+      lista.appendChild(li);
+    });
+  }
+
+  function mostrarEntrega() {
+    document.getElementById("panelEntrega").classList.toggle("hidden");
+  }
+
+  function mostrarBajas() {
+    document.getElementById("panelBajas").classList.toggle("hidden");
+  }
+
+  function mostrarInventario() {
+    const lista = document.getElementById("listaInventario");
+    lista.innerHTML = "";
+    const productos = inventarios[usuarioActual] || [];
+    productos.sort((a, b) => a.nombre.localeCompare(b.nombre)).forEach((p, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `${p.nombre} - $${p.precio} (${p.cantidad}) 
+        <button class="entrega" onclick="agregarEntrega(${i})">Agregar</button>
+        <button class="baja" onclick="agregarBaja(${i})">Baja</button>`;
+      lista.appendChild(li);
+    });
+    document.getElementById("panelInventario").classList.toggle("hidden");
+  }
+
+  function generarEntrega() {
+    if (confirm("¿Confirmar entrega?")) {
+      entrega.forEach(p => {
+        const item = inventarios[usuarioActual].find(x => x.nombre === p.nombre);
+        if (item) item.cantidad -= 1;
+      });
+      entrega = [];
+      actualizarEntrega();
+      alert("Entrega generada. PDF simulado guardado.");
+    }
+  }
+</script>
+
+</body>
+</html>
