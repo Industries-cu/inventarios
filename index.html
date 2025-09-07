@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión de Inventarios</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <style>
         :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #2ecc71;
             --danger: #e74c3c;
-            --dark: #2c3e50;
+            --warning: #f39c12;
             --light: #ecf0f1;
-            --gray: #95a5a6;
+            --dark: #34495e;
         }
         
         * {
@@ -34,10 +36,10 @@
         }
         
         header {
-            background-color: var(--dark);
+            background-color: var(--primary);
             color: white;
             padding: 15px 0;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
         .header-content {
@@ -46,19 +48,24 @@
             align-items: center;
         }
         
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
         }
         
-        .login-container h2 {
+        .auth-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        
+        .auth-form h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: var(--dark);
+            color: var(--primary);
         }
         
         .form-group {
@@ -68,30 +75,31 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            font-weight: 600;
+            font-weight: 500;
         }
         
         .form-group input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 4px;
             font-size: 16px;
         }
         
         .btn {
             padding: 12px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             transition: all 0.3s;
         }
         
         .btn-primary {
-            background-color: var(--primary);
+            background-color: var(--secondary);
             color: white;
+            width: 100%;
         }
         
         .btn-primary:hover {
@@ -99,7 +107,7 @@
         }
         
         .btn-success {
-            background-color: var(--secondary);
+            background-color: var(--success);
             color: white;
         }
         
@@ -116,13 +124,13 @@
             background-color: #c0392b;
         }
         
-        .btn-secondary {
-            background-color: var(--gray);
+        .btn-warning {
+            background-color: var(--warning);
             color: white;
         }
         
-        .btn-secondary:hover {
-            background-color: #7f8c8d;
+        .btn-warning:hover {
+            background-color: #e67e22;
         }
         
         .dashboard {
@@ -131,37 +139,55 @@
         
         .user-info {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
         }
         
-        .action-buttons {
+        .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
         
-        .search-bar {
+        .control-btn {
+            padding: 10px 15px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .control-btn.active {
+            background-color: var(--secondary);
+        }
+        
+        .search-container {
             margin-bottom: 20px;
         }
         
-        .search-bar input {
+        .search-input {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 4px;
             font-size: 16px;
         }
         
-        .search-results {
+        .results-container {
             margin-bottom: 30px;
+        }
+        
+        .product-list {
+            list-style: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             max-height: 300px;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-            display: none;
         }
         
         .product-item {
@@ -172,8 +198,20 @@
             border-bottom: 1px solid #eee;
         }
         
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
         .product-info {
             flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 500;
+        }
+        
+        .product-price {
+            color: #777;
         }
         
         .product-actions {
@@ -181,53 +219,57 @@
             gap: 10px;
         }
         
-        .panel {
+        .section {
             display: none;
             margin-bottom: 30px;
-            padding: 20px;
             background: white;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .section.active {
+            display: block;
+        }
+        
+        .section-title {
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
+            color: var(--primary);
         }
         
-        .panel-title {
-            font-size: 18px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
             font-weight: 600;
         }
         
-        .product-list {
-            list-style: none;
-        }
-        
-        .product-list li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+        .total-row {
+            font-weight: bold;
+            background-color: #f8f9fa;
         }
         
         .admin-panel {
             display: none;
         }
         
-        .admin-section {
-            margin-bottom: 30px;
-        }
-        
-        .admin-section h3 {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .notification {
@@ -235,48 +277,26 @@
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: white;
-            border-left: 4px solid var(--secondary);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
+            border-radius: 4px;
+            color: white;
+            background-color: var(--success);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             display: none;
             z-index: 1000;
         }
         
         .notification.error {
-            border-left-color: var(--danger);
-        }
-        
-        .history-list {
-            list-style: none;
-            margin-top: 15px;
+            background-color: var(--danger);
         }
         
         .history-item {
-            padding: 10px 15px;
+            padding: 15px;
             border: 1px solid #eee;
+            border-radius: 4px;
             margin-bottom: 10px;
-            border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        
-        table th, table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
         }
         
         .modal {
@@ -286,130 +306,144 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0,0,0,0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
         }
         
         .modal-content {
-            background: white;
+            background-color: white;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 8px;
             width: 90%;
             max-width: 500px;
         }
         
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .close {
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .modal-footer {
+        .modal-actions {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
         
-        .badge {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .badge-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .badge-danger {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .badge-success {
-            background-color: var(--secondary);
-            color: white;
+        @media (max-width: 768px) {
+            .controls, .admin-nav {
+                flex-direction: column;
+            }
+            
+            .product-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-actions {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Section -->
-    <div id="login-section">
-        <div class="login-container">
-            <h2>Iniciar Sesión</h2>
-            <div class="form-group">
-                <label for="username">Usuario</label>
-                <input type="text" id="username" placeholder="Ingresa tu usuario">
-            </div>
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" placeholder="Ingresa tu contraseña">
-            </div>
-            <button class="btn btn-primary" id="login-btn" style="width: 100%;">Ingresar</button>
+    <header>
+        <div class="container header-content">
+            <div class="logo">Sistema de Gestión</div>
+            <div id="userDisplay"></div>
         </div>
-    </div>
+    </header>
 
-    <!-- Dashboard Section -->
-    <div id="dashboard" class="dashboard">
-        <header>
-            <div class="container header-content">
-                <h1>Sistema de Gestión</h1>
-                <div class="user-info">
-                    <span id="user-display">Usuario: </span>
-                    <button class="btn btn-secondary" id="logout-btn">Cerrar Sesión</button>
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginContainer" class="auth-container">
+            <div class="auth-form">
+                <h2>Iniciar Sesión</h2>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" placeholder="Ingresa tu usuario">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña">
+                </div>
+                <button class="btn btn-primary" onclick="login()">Ingresar</button>
+            </div>
+        </div>
+
+        <!-- User Dashboard -->
+        <div id="userDashboard" class="dashboard">
+            <div class="user-info">
+                <h2 id="welcomeMessage">Bienvenido, Usuario</h2>
+                <div>
+                    <span id="deliveryTotal">Saldo de entrega: $0.00</span>
                 </div>
             </div>
-        </header>
 
-        <div class="container">
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="entrega-btn">Entrega <span id="saldo-entrega" class="badge badge-primary">0</span></button>
-                <button class="btn btn-danger" id="baja-btn">Baja Defecto</button>
-                <button class="btn btn-secondary" id="inventario-btn">Inventario General</button>
+            <div class="controls">
+                <button class="control-btn active" data-section="delivery-section">Entrega</button>
+                <button class="control-btn" data-section="low-section">Baja Defecto</button>
+                <button class="control-btn" data-section="inventory-section">Inventario General</button>
+                <button class="control-btn" data-section="history-section">Historial</button>
+                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
             </div>
 
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Buscar producto por nombre o precio...">
+            <!-- Delivery Section -->
+            <div id="delivery-section" class="section active">
+                <h3 class="section-title">Productos para Entrega</h3>
+                <table id="delivery-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="delivery-items">
+                        <!-- Delivery items will be added here -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="3">Total a Pagar</td>
+                            <td id="delivery-total">$0.00</td>
+                            <td>
+                                <button class="btn btn-success" onclick="generateDelivery()">Generar Entrega</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
 
-            <div id="search-results" class="search-results"></div>
-
-            <!-- Entrega Panel -->
-            <div id="entrega-panel" class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">Entrega</h3>
-                    <div>
-                        <span>Total: <strong id="total-entrega">0</strong></span>
-                        <button class="btn btn-success" id="generar-entrega-btn">Generar Entrega</button>
-                    </div>
-                </div>
-                <ul id="entrega-list" class="product-list"></ul>
+            <!-- Low Products Section -->
+            <div id="low-section" class="section">
+                <h3 class="section-title">Productos para Baja</h3>
+                <table id="low-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="low-items">
+                        <!-- Low items will be added here -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <button class="btn btn-danger" onclick="generateLow()">Realizar Bajas</button>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
 
-            <!-- Baja Panel -->
-            <div id="baja-panel" class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">Productos para Baja</h3>
-                </div>
-                <ul id="baja-list" class="product-list"></ul>
-            </div>
-
-            <!-- Inventario Panel -->
-            <div id="inventario-panel" class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">Inventario General</h3>
-                </div>
-                <table id="inventario-table">
+            <!-- Inventory Section -->
+            <div id="inventory-section" class="section">
+                <h3 class="section-title">Inventario General</h3>
+                <table id="inventory-table">
                     <thead>
                         <tr>
                             <th>Producto</th>
@@ -418,77 +452,138 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="inventory-items">
+                        <!-- Inventory items will be added here -->
+                    </tbody>
                 </table>
             </div>
 
-            <!-- Historial de PDFs para usuarios -->
-            <div id="historial-pdfs" class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">Historial de Entregas</h3>
+            <!-- History Section -->
+            <div id="history-section" class="section">
+                <h3 class="section-title">Historial</h3>
+                <div id="history-tabs">
+                    <button class="control-btn active" data-history="delivery-history">Entregas</button>
+                    <button class="control-btn" data-history="low-history">Bajas</button>
                 </div>
-                <ul id="pdf-list" class="history-list"></ul>
+                
+                <div id="delivery-history" class="history-content">
+                    <h4>Historial de Entregas</h4>
+                    <div id="delivery-history-list">
+                        <!-- Delivery history will be added here -->
+                    </div>
+                </div>
+                
+                <div id="low-history" class="history-content" style="display: none;">
+                    <h4>Historial de Bajas</h4>
+                    <div id="low-history-list">
+                        <!-- Low history will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Buscar producto por nombre o precio..." oninput="searchProducts()">
+            </div>
+
+            <div class="results-container">
+                <ul id="search-results" class="product-list">
+                    <!-- Search results will appear here -->
+                </ul>
             </div>
         </div>
-    </div>
 
-    <!-- Admin Panel -->
-    <div id="admin-panel" class="admin-panel">
-        <header>
-            <div class="container header-content">
-                <h1>Panel de Administración</h1>
-                <div class="user-info">
-                    <span>Administrador</span>
-                    <button class="btn btn-secondary" id="admin-logout-btn">Cerrar Sesión</button>
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="admin-panel">
+            <h2>Panel de Administrador</h2>
+            
+            <div class="admin-nav">
+                <button class="control-btn active" data-admin="deliveries-admin">Historial de Entregas</button>
+                <button class="control-btn" data-admin="lows-admin">Historial de Bajas</button>
+                <button class="control-btn" data-admin="inventory-admin">Gestión de Inventarios</button>
+                <button class="control-btn" data-admin="notifications-admin">Notificaciones</button>
+                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
+            </div>
+
+            <!-- Admin Deliveries Section -->
+            <div id="deliveries-admin" class="section active">
+                <h3 class="section-title">Historial de Entregas</h3>
+                <div id="admin-deliveries-list">
+                    <!-- Admin deliveries will be added here -->
                 </div>
             </div>
-        </header>
 
-        <div class="container">
-            <div class="admin-section">
-                <h3>Historial de Entregas</h3>
-                <div id="admin-entregas-list"></div>
+            <!-- Admin Lows Section -->
+            <div id="lows-admin" class="section">
+                <h3 class="section-title">Historial de Bajas</h3>
+                <div id="admin-lows-list">
+                    <!-- Admin lows will be added here -->
+                </div>
             </div>
 
-            <div class="admin-section">
-                <h3>Historial de Bajas</h3>
-                <div id="admin-bajas-list"></div>
-            </div>
-
-            <div class="admin-section">
-                <h3>Gestión de Inventarios</h3>
+            <!-- Admin Inventory Section -->
+            <div id="inventory-admin" class="section">
+                <h3 class="section-title">Gestión de Inventarios</h3>
                 <div class="form-group">
-                    <label for="select-vendedor">Seleccionar Vendedor:</label>
-                    <select id="select-vendedor" class="form-control">
-                        <option value="usuario1">Usuario 1</option>
-                        <option value="usuario2">Usuario 2</option>
-                        <option value="usuario3">Usuario 3</option>
-                        <option value="usuario4">Usuario 4</option>
-                        <option value="usuario5">Usuario 5</option>
+                    <label for="user-select">Seleccionar Vendedor:</label>
+                    <select id="user-select" onchange="loadUserInventory()">
+                        <option value="usuario1">Isaac</option>
+                        <option value="usuario2">Vendedor 2</option>
+                        <option value="usuario3">Vendedor 3</option>
+                        <option value="usuario4">Vendedor 4</option>
+                        <option value="usuario5">Vendedor 5</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" id="cargar-inventario-btn">Cargar Inventario</button>
-                <div id="admin-inventario-list" style="margin-top: 20px;"></div>
+                
+                <div id="admin-inventory-container">
+                    <table id="admin-inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-inventory-items">
+                            <!-- Admin inventory items will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4>Agregar Nuevo Producto</h4>
+                    <div class="form-group">
+                        <input type="text" id="new-product-name" placeholder="Nombre del producto">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="new-product-price" placeholder="Precio" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="new-product-quantity" placeholder="Cantidad">
+                    </div>
+                    <button class="btn btn-success" onclick="addNewProduct()">Agregar Producto</button>
+                </div>
             </div>
 
-            <div class="admin-section">
-                <h3>Notificaciones</h3>
-                <div id="notificaciones-list"></div>
+            <!-- Admin Notifications Section -->
+            <div id="notifications-admin" class="section">
+                <h3 class="section-title">Notificaciones</h3>
+                <div id="notifications-list">
+                    <!-- Notifications will be added here -->
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="modal">
+    <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Confirmar Entrega</h3>
-                <span class="close">&times;</span>
-            </div>
-            <p>¿Estás seguro de que deseas generar esta entrega? Esta acción no se puede deshacer.</p>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancel-btn">Cancelar</button>
-                <button class="btn btn-primary" id="confirm-btn">Confirmar</button>
+            <h3 id="modalTitle">Confirmar acción</h3>
+            <p id="modalMessage">¿Estás seguro de que deseas realizar esta acción?</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="confirmAction()">Confirmar</button>
+                <button class="btn btn-danger" onclick="closeModal()">Cancelar</button>
             </div>
         </div>
     </div>
@@ -497,673 +592,901 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        // Datos de ejemplo para los inventarios
-        const inventarios = {
-            usuario1: [
-                { id: 1, nombre: "Producto A", precio: 100, cantidad: 10 },
-                { id: 2, nombre: "Producto B", precio: 200, cantidad: 5 },
-                { id: 3, nombre: "Producto C", precio: 150, cantidad: 8 }
-            ],
-            usuario2: [
-                { id: 1, nombre: "Producto A", precio: 110, cantidad: 7 },
-                { id: 4, nombre: "Producto D", precio: 250, cantidad: 12 },
-                { id: 5, nombre: "Producto E", precio: 180, cantidad: 6 }
-            ],
-            usuario3: [
-                { id: 2, nombre: "Producto B", precio: 190, cantidad: 9 },
-                { id: 6, nombre: "Producto F", precio: 300, cantidad: 4 },
-                { id: 7, nombre: "Producto G", precio: 120, cantidad: 15 }
-            ],
-            usuario4: [
-                { id: 3, nombre: "Producto C", precio: 160, cantidad: 11 },
-                { id: 8, nombre: "Producto H", precio: 220, cantidad: 7 },
-                { id: 9, nombre: "Producto I", precio: 140, cantidad: 8 }
-            ],
-            usuario5: [
-                { id: 1, nombre: "Producto A", precio: 105, cantidad: 14 },
-                { id: 10, nombre: "Producto J", precio: 270, cantidad: 5 },
-                { id: 11, nombre: "Producto K", precio: 190, cantidad: 9 }
-            ]
+        // Global variables
+        let currentUser = null;
+        let users = {
+            "usuario1": { password: "queriquera1", name: "Isaac", inventory: [] },
+            "usuario2": { password: "pass2", name: "Vendedor 2", inventory: [] },
+            "usuario3": { password: "pass3", name: "Vendedor 3", inventory: [] },
+            "usuario4": { password: "pass4", name: "Vendedor 4", inventory: [] },
+            "usuario5": { password: "pass5", name: "Vendedor 5", inventory: [] },
+            "admin": { password: "Ludmila76", name: "Administrador", inventory: [] }
         };
 
-        // Estado de la aplicación
-        let currentUser = null;
-        let entregaActual = [];
-        let bajasActual = [];
-        let historialEntregas = [];
-        let historialBajas = [];
-        let notificaciones = [];
+        let deliveryItems = [];
+        let lowItems = [];
+        let deliveryHistory = [];
+        let lowHistory = [];
+        let notifications = [];
 
-        // Elementos del DOM
-        const loginSection = document.getElementById('login-section');
-        const dashboard = document.getElementById('dashboard');
-        const adminPanel = document.getElementById('admin-panel');
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const adminLogoutBtn = document.getElementById('admin-logout-btn');
-        const userDisplay = document.getElementById('user-display');
-        const entregaBtn = document.getElementById('entrega-btn');
-        const bajaBtn = document.getElementById('baja-btn');
-        const inventarioBtn = document.getElementById('inventario-btn');
-        const saldoEntrega = document.getElementById('saldo-entrega');
-        const searchInput = document.getElementById('search-input');
-        const searchResults = document.getElementById('search-results');
-        const entregaPanel = document.getElementById('entrega-panel');
-        const bajaPanel = document.getElementById('baja-panel');
-        const inventarioPanel = document.getElementById('inventario-panel');
-        const entregaList = document.getElementById('entrega-list');
-        const bajaList = document.getElementById('baja-list');
-        const totalEntrega = document.getElementById('total-entrega');
-        const generarEntregaBtn = document.getElementById('generar-entrega-btn');
-        const confirmationModal = document.getElementById('confirmation-modal');
-        const cancelBtn = document.getElementById('cancel-btn');
-        const confirmBtn = document.getElementById('confirm-btn');
-        const closeModal = document.querySelector('.close');
-        const notification = document.getElementById('notification');
-        const pdfList = document.getElementById('pdf-list');
-        const adminEntregasList = document.getElementById('admin-entregas-list');
-        const adminBajasList = document.getElementById('admin-bajas-list');
-        const selectVendedor = document.getElementById('select-vendedor');
-        const cargarInventarioBtn = document.getElementById('cargar-inventario-btn');
-        const adminInventarioList = document.getElementById('admin-inventario-list');
-        const notificacionesList = document.getElementById('notificaciones-list');
+        // Initialize with sample data
+        function initializeData() {
+            // Sample products for each user
+            const sampleProducts = [
+                { id: 1, name: "Producto A", price: 10.50, quantity: 20 },
+                { id: 2, name: "Producto B", price: 15.75, quantity: 15 },
+                { id: 3, name: "Producto C", price: 8.30, quantity: 30 },
+                { id: 4, name: "Producto D", price: 25.00, quantity: 10 },
+                { id: 5, name: "Producto E", price: 5.50, quantity: 50 }
+            ];
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cargar datos del localStorage si existen
-            cargarDatosAlmacenados();
-            
-            // Event Listeners
-            loginBtn.addEventListener('click', iniciarSesion);
-            logoutBtn.addEventListener('click', cerrarSesion);
-            adminLogoutBtn.addEventListener('click', cerrarSesion);
-            entregaBtn.addEventListener('click', () => togglePanel(entregaPanel));
-            bajaBtn.addEventListener('click', () => togglePanel(bajaPanel));
-            inventarioBtn.addEventListener('click', () => {
-                togglePanel(inventarioPanel);
-                mostrarInventarioGeneral();
-            });
-            
-            searchInput.addEventListener('input', buscarProductos);
-            generarEntregaBtn.addEventListener('click', mostrarModalConfirmacion);
-            cancelBtn.addEventListener('click', ocultarModal);
-            confirmBtn.addEventListener('click', generarEntrega);
-            closeModal.addEventListener('click', ocultarModal);
-            
-            cargarInventarioBtn.addEventListener('click', cargarInventarioAdmin);
-        });
-
-        // Funciones de la aplicación
-        function iniciarSesion() {
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
-            
-            if (!username || !password) {
-                mostrarNotificacion('Por favor, completa todos los campos', 'error');
-                return;
-            }
-            
-            // Verificar credenciales de admin
-            if (username === 'admin' && password === 'Ludmila76') {
-                currentUser = 'admin';
-                loginSection.style.display = 'none';
-                dashboard.style.display = 'none';
-                adminPanel.style.display = 'block';
-                cargarDatosAdmin();
-                return;
-            }
-            
-            // Verificar credenciales de usuarios
-            if (Object.keys(inventarios).includes(username)) {
-                currentUser = username;
-                userDisplay.textContent = `Usuario: ${username}`;
-                loginSection.style.display = 'none';
-                dashboard.style.display = 'block';
-                adminPanel.style.display = 'none';
+            // Assign different inventories to each user
+            for (let i = 1; i <= 5; i++) {
+                const userKey = `usuario${i}`;
+                users[userKey].inventory = JSON.parse(JSON.stringify(sampleProducts));
                 
-                // Reiniciar entrega y bajas al iniciar sesión
-                entregaActual = [];
-                bajasActual = [];
-                actualizarSaldoEntrega();
-                actualizarListaEntrega();
-                actualizarListaBajas();
-                
-                return;
-            }
-            
-            mostrarNotificacion('Usuario o contraseña incorrectos', 'error');
-        }
-
-        function cerrarSesion() {
-            currentUser = null;
-            loginSection.style.display = 'block';
-            dashboard.style.display = 'none';
-            adminPanel.style.display = 'none';
-            usernameInput.value = '';
-            passwordInput.value = '';
-            ocultarTodosPaneles();
-        }
-
-        function togglePanel(panel) {
-            // Ocultar todos los paneles primero
-            ocultarTodosPaneles();
-            
-            // Mostrar el panel seleccionado
-            panel.style.display = 'block';
-            
-            // Si es el panel de entrega, actualizar la lista
-            if (panel === entregaPanel) {
-                actualizarListaEntrega();
-            } else if (panel === bajaPanel) {
-                actualizarListaBajas();
-            }
-        }
-
-        function ocultarTodosPaneles() {
-            entregaPanel.style.display = 'none';
-            bajaPanel.style.display = 'none';
-            inventarioPanel.style.display = 'none';
-        }
-
-        function buscarProductos() {
-            const query = searchInput.value.toLowerCase();
-            
-            if (query.length < 2) {
-                searchResults.style.display = 'none';
-                return;
-            }
-            
-            const resultados = inventarios[currentUser].filter(producto => 
-                producto.nombre.toLowerCase().includes(query) || 
-                producto.precio.toString().includes(query)
-            );
-            
-            mostrarResultadosBusqueda(resultados);
-        }
-
-        function mostrarResultadosBusqueda(resultados) {
-            searchResults.innerHTML = '';
-            
-            if (resultados.length === 0) {
-                searchResults.innerHTML = '<div class="product-item">No se encontraron productos</div>';
-                searchResults.style.display = 'block';
-                return;
-            }
-            
-            resultados.forEach(producto => {
-                const item = document.createElement('div');
-                item.className = 'product-item';
-                item.innerHTML = `
-                    <div class="product-info">
-                        <strong>${producto.nombre}</strong> - $${producto.precio} (Disponible: ${producto.cantidad})
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-success btn-agregar" data-id="${producto.id}">Agregar</button>
-                        <button class="btn btn-danger btn-baja" data-id="${producto.id}">Baja</button>
-                    </div>
-                `;
-                searchResults.appendChild(item);
-            });
-            
-            // Agregar event listeners a los botones
-            document.querySelectorAll('.btn-agregar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    agregarProductoEntrega(productId);
-                });
-            });
-            
-            document.querySelectorAll('.btn-baja').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    agregarProductoBaja(productId);
-                });
-            });
-            
-            searchResults.style.display = 'block';
-        }
-
-        function agregarProductoEntrega(productId) {
-            const producto = inventarios[currentUser].find(p => p.id === productId);
-            
-            if (!producto) return;
-            
-            // Verificar si el producto ya está en la entrega
-            const existente = entregaActual.find(item => item.id === productId);
-            
-            if (existente) {
-                // Si ya existe, incrementar la cantidad si hay disponibilidad
-                if (existente.cantidad < producto.cantidad) {
-                    existente.cantidad += 1;
-                } else {
-                    mostrarNotificacion('No hay suficiente stock de este producto', 'error');
-                    return;
-                }
-            } else {
-                // Si no existe, agregarlo con cantidad 1
-                entregaActual.push({
-                    id: producto.id,
-                    nombre: producto.nombre,
-                    precio: producto.precio,
-                    cantidad: 1
+                // Modify prices and quantities for variety
+                users[userKey].inventory.forEach((product, index) => {
+                    product.price = (product.price * (0.9 + (i * 0.05))).toFixed(2);
+                    product.quantity = product.quantity - (i * 2) + (index * 3);
+                    if (product.quantity < 0) product.quantity = 5;
                 });
             }
+
+            // Load data from localStorage if available
+            loadFromLocalStorage();
             
-            actualizarSaldoEntrega();
-            actualizarListaEntrega();
-            searchResults.style.display = 'none';
-            searchInput.value = '';
-            
-            mostrarNotificacion('Producto agregado a la entrega');
+            // Set up event listeners
+            setupEventListeners();
         }
 
-        function agregarProductoBaja(productId) {
-            const producto = inventarios[currentUser].find(p => p.id === productId);
-            
-            if (!producto) return;
-            
-            // Verificar si el producto ya está en las bajas
-            const existente = bajasActual.find(item => item.id === productId);
-            
-            if (existente) {
-                existente.cantidad += 1;
-            } else {
-                bajasActual.push({
-                    id: producto.id,
-                    nombre: producto.nombre,
-                    precio: producto.precio,
-                    cantidad: 1,
-                    aprobado: false
-                });
-            }
-            
-            actualizarListaBajas();
-            searchResults.style.display = 'none';
-            searchInput.value = '';
-            
-            mostrarNotificacion('Producto marcado para baja');
-        }
-
-        function actualizarSaldoEntrega() {
-            const total = entregaActual.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-            saldoEntrega.textContent = total;
-            totalEntrega.textContent = total;
-        }
-
-        function actualizarListaEntrega() {
-            entregaList.innerHTML = '';
-            
-            if (entregaActual.length === 0) {
-                entregaList.innerHTML = '<li>No hay productos en la entrega</li>';
-                return;
-            }
-            
-            entregaActual.forEach(item => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${item.nombre} - $${item.precio} x ${item.cantidad}</span>
-                    <span>$${item.precio * item.cantidad}</span>
-                `;
-                entregaList.appendChild(li);
-            });
-        }
-
-        function actualizarListaBajas() {
-            bajaList.innerHTML = '';
-            
-            if (bajasActual.length === 0) {
-                bajaList.innerHTML = '<li>No hay productos para baja</li>';
-                return;
-            }
-            
-            bajasActual.forEach(item => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${item.nombre} - Cantidad: ${item.cantidad}</span>
-                    <button class="btn btn-danger btn-eliminar-baja" data-id="${item.id}">Eliminar</button>
-                `;
-                bajaList.appendChild(li);
-            });
-            
-            // Agregar event listeners a los botones de eliminar
-            document.querySelectorAll('.btn-eliminar-baja').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    eliminarProductoBaja(productId);
-                });
-            });
-        }
-
-        function eliminarProductoBaja(productId) {
-            bajasActual = bajasActual.filter(item => item.id !== productId);
-            actualizarListaBajas();
-            mostrarNotificacion('Producto eliminado de las bajas');
-        }
-
-        function mostrarInventarioGeneral() {
-            const tbody = inventarioPanel.querySelector('tbody');
-            tbody.innerHTML = '';
-            
-            // Ordenar inventario alfabéticamente
-            const inventarioOrdenado = [...inventarios[currentUser]].sort((a, b) => 
-                a.nombre.localeCompare(b.nombre)
-            );
-            
-            inventarioOrdenado.forEach(producto => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${producto.nombre}</td>
-                    <td>$${producto.precio}</td>
-                    <td>${producto.cantidad}</td>
-                    <td>
-                        <button class="btn btn-success btn-agregar-inv" data-id="${producto.id}">Agregar</button>
-                        <button class="btn btn-danger btn-baja-inv" data-id="${producto.id}">Baja</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            
-            // Agregar event listeners a los botones
-            document.querySelectorAll('.btn-agregar-inv').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    agregarProductoEntrega(productId);
-                });
-            });
-            
-            document.querySelectorAll('.btn-baja-inv').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    agregarProductoBaja(productId);
-                });
-            });
-        }
-
-        function mostrarModalConfirmacion() {
-            if (entregaActual.length === 0) {
-                mostrarNotificacion('No hay productos en la entrega', 'error');
-                return;
-            }
-            
-            confirmationModal.style.display = 'flex';
-        }
-
-        function ocultarModal() {
-            confirmationModal.style.display = 'none';
-        }
-
-        function generarEntrega() {
-            ocultarModal();
-            
-            // Crear registro de la entrega
-            const entrega = {
-                id: Date.now(),
-                fecha: new Date().toLocaleString(),
-                usuario: currentUser,
-                productos: [...entregaActual],
-                total: entregaActual.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
-            };
-            
-            // Agregar al historial
-            historialEntregas.push(entrega);
-            
-            // Actualizar inventario (reducir cantidades)
-            entregaActual.forEach(item => {
-                const producto = inventarios[currentUser].find(p => p.id === item.id);
-                if (producto) {
-                    producto.cantidad -= item.cantidad;
-                    
-                    // Verificar si el producto se agotó
-                    if (producto.cantidad === 0) {
-                        // Agregar notificación para el admin
-                        notificaciones.push({
-                            tipo: 'agotado',
-                            mensaje: `El producto ${producto.nombre} se ha agotado en el inventario de ${currentUser}`,
-                            fecha: new Date().toLocaleString(),
-                            usuario: currentUser,
-                            producto: producto.nombre
-                        });
+        // Load data from localStorage
+        function loadFromLocalStorage() {
+            try {
+                const usersData = localStorage.getItem('usersData');
+                if (usersData) {
+                    const parsedData = JSON.parse(usersData);
+                    for (const key in parsedData) {
+                        if (users[key]) {
+                            users[key].inventory = parsedData[key].inventory || users[key].inventory;
+                        }
                     }
                 }
-            });
-            
-            // Generar PDF (simulado)
-            generarPDF(entrega);
-            
-            // Reiniciar entrega actual
-            entregaActual = [];
-            actualizarSaldoEntrega();
-            actualizarListaEntrega();
-            
-            // Guardar datos en localStorage
-            guardarDatos();
-            
-            mostrarNotificacion('Entrega generada con éxito');
-        }
 
-        function generarPDF(entrega) {
-            // En una implementación real, aquí se generaría un PDF real
-            // Por ahora, simulamos la generación creando un elemento en el historial
-            
-            const pdfItem = document.createElement('li');
-            pdfItem.className = 'history-item';
-            pdfItem.innerHTML = `
-                <div>
-                    <strong>Entrega del ${entrega.fecha}</strong>
-                    <div>Total: $${entrega.total}</div>
-                </div>
-                <button class="btn btn-primary btn-descargar-pdf" data-id="${entrega.id}">Descargar PDF</button>
-            `;
-            
-            pdfList.appendChild(pdfItem);
-            
-            // Agregar event listener al botón de descarga
-            pdfItem.querySelector('.btn-descargar-pdf').addEventListener('click', function() {
-                descargarPDF(entrega);
-            });
-        }
-
-        function descargarPDF(entrega) {
-            // En una implementación real, aquí se generaría y descargaría un PDF
-            alert(`Descargando PDF de la entrega #${entrega.id}`);
-            // window.jsPDF = window.jspdf.jsPDF;
-            // const doc = new jsPDF();
-            // doc.text(`Entrega de ${entrega.usuario} - ${entrega.fecha}`, 10, 10);
-            // let y = 30;
-            // entrega.productos.forEach(producto => {
-            //     doc.text(`${producto.cantidad} x ${producto.nombre} - $${producto.precio} c/u`, 10, y);
-            //     y += 10;
-            // });
-            // doc.text(`Total: $${entrega.total}`, 10, y + 10);
-            // doc.save(`entrega-${entrega.id}.pdf`);
-        }
-
-        function cargarDatosAdmin() {
-            // Cargar historial de entregas
-            adminEntregasList.innerHTML = '';
-            historialEntregas.forEach(entrega => {
-                const entregaItem = document.createElement('div');
-                entregaItem.className = 'history-item';
-                entregaItem.innerHTML = `
-                    <div>
-                        <strong>${entrega.usuario} - ${entrega.fecha}</strong>
-                        <div>Total: $${entrega.total}</div>
-                    </div>
-                    <button class="btn btn-primary btn-descargar-pdf-admin" data-id="${entrega.id}">Descargar PDF</button>
-                `;
-                adminEntregasList.appendChild(entregaItem);
-                
-                // Agregar event listener al botón de descarga
-                entregaItem.querySelector('.btn-descargar-pdf-admin').addEventListener('click', function() {
-                    descargarPDF(entrega);
-                });
-            });
-            
-            // Cargar historial de bajas
-            adminBajasList.innerHTML = '';
-            historialBajas.forEach(baja => {
-                if (!baja.aprobado) {
-                    const bajaItem = document.createElement('div');
-                    bajaItem.className = 'history-item';
-                    bajaItem.innerHTML = `
-                        <div>
-                            <strong>${baja.usuario} - ${baja.fecha}</strong>
-                            <div>${baja.producto} - Cantidad: ${baja.cantidad}</div>
-                        </div>
-                        <button class="btn btn-success btn-aprobar-baja" data-id="${baja.id}">Aprobar</button>
-                    `;
-                    adminBajasList.appendChild(bajaItem);
-                    
-                    // Agregar event listener al botón de aprobar
-                    bajaItem.querySelector('.btn-aprobar-baja').addEventListener('click', function() {
-                        aprobarBaja(baja.id);
-                    });
+                const deliveryHistoryData = localStorage.getItem('deliveryHistory');
+                if (deliveryHistoryData) {
+                    deliveryHistory = JSON.parse(deliveryHistoryData);
                 }
-            });
-            
-            // Cargar notificaciones
-            notificacionesList.innerHTML = '';
-            if (notificaciones.length === 0) {
-                notificacionesList.innerHTML = '<p>No hay notificaciones</p>';
-            } else {
-                notificaciones.forEach(notif => {
-                    const notifItem = document.createElement('div');
-                    notifItem.className = 'history-item';
-                    notifItem.innerHTML = `
-                        <div>
-                            <strong>${notif.fecha}</strong>
-                            <div>${notif.mensaje}</div>
-                        </div>
-                    `;
-                    notificacionesList.appendChild(notifItem);
-                });
+
+                const lowHistoryData = localStorage.getItem('lowHistory');
+                if (lowHistoryData) {
+                    lowHistory = JSON.parse(lowHistoryData);
+                }
+
+                const notificationsData = localStorage.getItem('notifications');
+                if (notificationsData) {
+                    notifications = JSON.parse(notificationsData);
+                }
+            } catch (e) {
+                console.error("Error loading data from localStorage:", e);
             }
         }
 
-        function cargarInventarioAdmin() {
-            const vendedor = selectVendedor.value;
-            adminInventarioList.innerHTML = '';
+        // Save data to localStorage
+        function saveToLocalStorage() {
+            try {
+                // Save users data
+                const usersData = {};
+                for (const key in users) {
+                    usersData[key] = {
+                        inventory: users[key].inventory
+                    };
+                }
+                localStorage.setItem('usersData', JSON.stringify(usersData));
+                
+                // Save history
+                localStorage.setItem('deliveryHistory', JSON.stringify(deliveryHistory));
+                localStorage.setItem('lowHistory', JSON.stringify(lowHistory));
+                
+                // Save notifications
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+            } catch (e) {
+                console.error("Error saving data to localStorage:", e);
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Section control buttons
+            document.querySelectorAll('.control-btn[data-section]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Deactivate all buttons and sections
+                    document.querySelectorAll('.control-btn[data-section]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Activate current button and section
+                    this.classList.add('active');
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+
+            // History tabs
+            document.querySelectorAll('.control-btn[data-history]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const historyId = this.getAttribute('data-history');
+                    
+                    // Deactivate all buttons and history content
+                    document.querySelectorAll('.control-btn[data-history]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.history-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    // Activate current button and history content
+                    this.classList.add('active');
+                    document.getElementById(historyId).style.display = 'block';
+                });
+            });
+
+            // Admin tabs
+            document.querySelectorAll('.control-btn[data-admin]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const adminSectionId = this.getAttribute('data-admin');
+                    
+                    // Deactivate all buttons and sections
+                    document.querySelectorAll('.control-btn[data-admin]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Activate current button and section
+                    this.classList.add('active');
+                    document.getElementById(adminSectionId).classList.add('active');
+                });
+            });
+        }
+
+        // Login function
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             
-            inventarios[vendedor].forEach(producto => {
-                const productItem = document.createElement('div');
-                productItem.className = 'product-item';
-                productItem.innerHTML = `
+            if (!username || !password) {
+                showNotification('Por favor ingresa usuario y contraseña', true);
+                return;
+            }
+            
+            if (users[username] && users[username].password === password) {
+                currentUser = username;
+                
+                // Hide login, show appropriate dashboard
+                document.getElementById('loginContainer').style.display = 'none';
+                
+                if (username === 'admin') {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadAdminData();
+                } else {
+                    document.getElementById('userDashboard').style.display = 'block';
+                    document.getElementById('welcomeMessage').textContent = `Bienvenido, ${users[username].name}`;
+                    loadUserData();
+                }
+                
+                showNotification(`Bienvenido ${users[username].name}`);
+            } else {
+                showNotification('Usuario o contraseña incorrectos', true);
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            deliveryItems = [];
+            lowItems = [];
+            
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('userDashboard').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'none';
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Load user data
+        function loadUserData() {
+            updateDeliveryDisplay();
+            loadInventory();
+            loadHistory();
+        }
+
+        // Load admin data
+        function loadAdminData() {
+            loadAdminDeliveries();
+            loadAdminLows();
+            loadUserInventory();
+            loadNotifications();
+        }
+
+        // Search products
+        function searchProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const resultsContainer = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+            
+            if (!searchTerm) return;
+            
+            const userInventory = users[currentUser].inventory;
+            const filteredProducts = userInventory.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.price.toString().includes(searchTerm)
+            );
+            
+            filteredProducts.forEach(product => {
+                const li = document.createElement('li');
+                li.className = 'product-item';
+                li.innerHTML = `
                     <div class="product-info">
-                        <strong>${producto.nombre}</strong> - $${producto.precio} (Disponible: ${producto.cantidad})
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">Precio: $${product.price} | Stock: ${product.quantity}</div>
                     </div>
                     <div class="product-actions">
-                        <button class="btn btn-danger btn-eliminar-producto" data-vendedor="${vendedor}" data-id="${producto.id}">Eliminar</button>
+                        <button class="btn btn-success" onclick="addToDelivery(${product.id})">Agregar</button>
+                        <button class="btn btn-danger" onclick="addToLow(${product.id})">Baja</button>
                     </div>
                 `;
-                adminInventarioList.appendChild(productItem);
+                resultsContainer.appendChild(li);
             });
+        }
+
+        // Add product to delivery
+        function addToDelivery(productId) {
+            const product = users[currentUser].inventory.find(p => p.id === productId);
+            if (!product) return;
             
-            // Agregar formulario para añadir producto
-            const addForm = document.createElement('div');
-            addForm.className = 'form-group';
-            addForm.style.marginTop = '20px';
-            addForm.innerHTML = `
-                <h4>Añadir nuevo producto</h4>
-                <div style="display: flex; gap: 10px; align-items: flex-end;">
-                    <div>
-                        <label>Nombre</label>
-                        <input type="text" id="new-product-name" class="form-control">
-                    </div>
-                    <div>
-                        <label>Precio</label>
-                        <input type="number" id="new-product-price" class="form-control">
-                    </div>
-                    <div>
-                        <label>Cantidad</label>
-                        <input type="number" id="new-product-quantity" class="form-control">
-                    </div>
-                    <button class="btn btn-success" id="add-product-btn">Añadir</button>
-                </div>
-            `;
-            adminInventarioList.appendChild(addForm);
+            // Check if product already in delivery
+            const existingItem = deliveryItems.find(item => item.id === productId);
             
-            // Event listeners para los botones
-            document.querySelectorAll('.btn-eliminar-producto').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const vendedor = this.getAttribute('data-vendedor');
-                    const productId = parseInt(this.getAttribute('data-id'));
-                    eliminarProductoAdmin(vendedor, productId);
-                });
-            });
-            
-            document.getElementById('add-product-btn').addEventListener('click', function() {
-                const nombre = document.getElementById('new-product-name').value.trim();
-                const precio = parseFloat(document.getElementById('new-product-price').value);
-                const cantidad = parseInt(document.getElementById('new-product-quantity').value);
-                const vendedor = selectVendedor.value;
-                
-                if (!nombre || isNaN(precio) || isNaN(cantidad)) {
-                    mostrarNotificacion('Por favor, completa todos los campos correctamente', 'error');
+            if (existingItem) {
+                if (existingItem.quantity >= product.quantity) {
+                    showNotification('No hay suficiente stock', true);
                     return;
                 }
-                
-                agregarProductoAdmin(vendedor, nombre, precio, cantidad);
-            });
-        }
-
-        function eliminarProductoAdmin(vendedor, productId) {
-            inventarios[vendedor] = inventarios[vendedor].filter(p => p.id !== productId);
-            cargarInventarioAdmin();
-            guardarDatos();
-            mostrarNotificacion('Producto eliminado');
-        }
-
-        function agregarProductoAdmin(vendedor, nombre, precio, cantidad) {
-            // Generar un nuevo ID
-            const newId = inventarios[vendedor].length > 0 
-                ? Math.max(...inventarios[vendedor].map(p => p.id)) + 1 
-                : 1;
-                
-            inventarios[vendedor].push({
-                id: newId,
-                nombre,
-                precio,
-                cantidad
-            });
-            
-            // Limpiar formulario
-            document.getElementById('new-product-name').value = '';
-            document.getElementById('new-product-price').value = '';
-            document.getElementById('new-product-quantity').value = '';
-            
-            cargarInventarioAdmin();
-            guardarDatos();
-            mostrarNotificacion('Producto añadido');
-        }
-
-        function aprobarBaja(bajaId) {
-            const baja = historialBajas.find(b => b.id === bajaId);
-            if (baja) {
-                baja.aprobado = true;
-                
-                // Actualizar inventario (reducir cantidades)
-                const vendedor = baja.usuario;
-                const producto = inventarios[vendedor].find(p => p.nombre === baja.producto);
-                
-                if (producto) {
-                    producto.cantidad -= baja.cantidad;
-                    if (producto.cantidad < 0) producto.cantidad = 0;
+                existingItem.quantity++;
+            } else {
+                if (product.quantity < 1) {
+                    showNotification('No hay suficiente stock', true);
+                    return;
                 }
+                deliveryItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: parseFloat(product.price),
+                    quantity: 1
+                });
+            }
+            
+            updateDeliveryDisplay();
+            showNotification('Producto agregado a entrega');
+        }
+
+        // Add product to low items
+        function addToLow(productId) {
+            const product = users[currentUser].inventory.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Check if product already in low items
+            const existingItem = lowItems.find(item => item.id === productId);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= product.quantity) {
+                    showNotification('No hay suficiente stock', true);
+                    return;
+                }
+                existingItem.quantity++;
+            } else {
+                if (product.quantity < 1) {
+                    showNotification('No hay suficiente stock', true);
+                    return;
+                }
+                lowItems.push({
+                    id: product.id,
+                    name: product.name,
+                    price: parseFloat(product.price),
+                    quantity: 1
+                });
+            }
+            
+            updateLowDisplay();
+            showNotification('Producto agregado a bajas');
+        }
+
+        // Update delivery display
+        function updateDeliveryDisplay() {
+            const deliveryItemsContainer = document.getElementById('delivery-items');
+            const deliveryTotalElement = document.getElementById('delivery-total');
+            const deliveryTotalDisplay = document.getElementById('deliveryTotal');
+            
+            deliveryItemsContainer.innerHTML = '';
+            let total = 0;
+            
+            deliveryItems.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
                 
-                guardarDatos();
-                cargarDatosAdmin();
-                mostrarNotificacion('Baja aprobada e inventario actualizado');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>
+                        <button onclick="changeDeliveryQuantity(${item.id}, -1)">-</button>
+                        ${item.quantity}
+                        <button onclick="changeDeliveryQuantity(${item.id}, 1)">+</button>
+                    </td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeFromDelivery(${item.id})">Eliminar</button>
+                    </td>
+                `;
+                deliveryItemsContainer.appendChild(tr);
+            });
+            
+            deliveryTotalElement.textContent = `$${total.toFixed(2)}`;
+            deliveryTotalDisplay.textContent = `Saldo de entrega: $${total.toFixed(2)}`;
+        }
+
+        // Update low items display
+        function updateLowDisplay() {
+            const lowItemsContainer = document.getElementById('low-items');
+            lowItemsContainer.innerHTML = '';
+            
+            lowItems.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>
+                        <button onclick="changeLowQuantity(${item.id}, -1)">-</button>
+                        ${item.quantity}
+                        <button onclick="changeLowQuantity(${item.id}, 1)">+</button>
+                    </td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeFromLow(${item.id})">Eliminar</button>
+                    </td>
+                `;
+                lowItemsContainer.appendChild(tr);
+            });
+        }
+
+        // Change delivery quantity
+        function changeDeliveryQuantity(productId, change) {
+            const item = deliveryItems.find(item => item.id === productId);
+            if (!item) return;
+            
+            const product = users[currentUser].inventory.find(p => p.id === productId);
+            
+            if (change > 0) {
+                if (item.quantity >= product.quantity) {
+                    showNotification('No hay suficiente stock', true);
+                    return;
+                }
+                item.quantity++;
+            } else {
+                if (item.quantity <= 1) {
+                    removeFromDelivery(productId);
+                    return;
+                }
+                item.quantity--;
+            }
+            
+            updateDeliveryDisplay();
+        }
+
+        // Change low quantity
+        function changeLowQuantity(productId, change) {
+            const item = lowItems.find(item => item.id === productId);
+            if (!item) return;
+            
+            const product = users[currentUser].inventory.find(p => p.id === productId);
+            
+            if (change > 0) {
+                if (item.quantity >= product.quantity) {
+                    showNotification('No hay suficiente stock', true);
+                    return;
+                }
+                item.quantity++;
+            } else {
+                if (item.quantity <= 1) {
+                    removeFromLow(productId);
+                    return;
+                }
+                item.quantity--;
+            }
+            
+            updateLowDisplay();
+        }
+
+        // Remove from delivery
+        function removeFromDelivery(productId) {
+            deliveryItems = deliveryItems.filter(item => item.id !== productId);
+            updateDeliveryDisplay();
+            showNotification('Producto eliminado de entrega');
+        }
+
+        // Remove from low items
+        function removeFromLow(productId) {
+            lowItems = lowItems.filter(item => item.id !== productId);
+            updateLowDisplay();
+            showNotification('Producto eliminado de bajas');
+        }
+
+        // Load inventory
+        function loadInventory() {
+            const inventoryContainer = document.getElementById('inventory-items');
+            inventoryContainer.innerHTML = '';
+            
+            const userInventory = users[currentUser].inventory;
+            userInventory.sort((a, b) => a.name.localeCompare(b.name));
+            
+            userInventory.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>$${parseFloat(product.price).toFixed(2)}</td>
+                    <td>${product.quantity}</td>
+                    <td>
+                        <button class="btn btn-success" onclick="addToDelivery(${product.id})">Agregar</button>
+                        <button class="btn btn-danger" onclick="addToLow(${product.id})">Baja</button>
+                    </td>
+                `;
+                inventoryContainer.appendChild(tr);
+            });
+        }
+
+        // Load history
+        function loadHistory() {
+            const deliveryHistoryList = document.getElementById('delivery-history-list');
+            const lowHistoryList = document.getElementById('low-history-list');
+            
+            deliveryHistoryList.innerHTML = '';
+            lowHistoryList.innerHTML = '';
+            
+            // Filter history for current user
+            const userDeliveryHistory = deliveryHistory.filter(record => record.user === currentUser);
+            const userLowHistory = lowHistory.filter(record => record.user === currentUser);
+            
+            userDeliveryHistory.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
+                        <strong>Total:</strong> $${record.total.toFixed(2)}
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="downloadPDF('delivery', ${record.id})">Descargar PDF</button>
+                    </div>
+                `;
+                deliveryHistoryList.appendChild(historyItem);
+            });
+            
+            userLowHistory.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
+                        <strong>Productos:</strong> ${record.items.length}
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="downloadPDF('low', ${record.id})">Descargar PDF</button>
+                    </div>
+                `;
+                lowHistoryList.appendChild(historyItem);
+            });
+        }
+
+        // Generate delivery
+        function generateDelivery() {
+            if (deliveryItems.length === 0) {
+                showNotification('No hay productos en la entrega', true);
+                return;
+            }
+            
+            showConfirmationModal(
+                'Confirmar Entrega',
+                '¿Estás seguro de que deseas generar la entrega? Esta acción no se puede deshacer.',
+                () => {
+                    // Calculate total
+                    const total = deliveryItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    
+                    // Create delivery record
+                    const deliveryRecord = {
+                        id: Date.now(),
+                        date: new Date(),
+                        user: currentUser,
+                        items: [...deliveryItems],
+                        total: total
+                    };
+                    
+                    // Update inventory
+                    deliveryItems.forEach(deliveryItem => {
+                        const product = users[currentUser].inventory.find(p => p.id === deliveryItem.id);
+                        if (product) {
+                            product.quantity -= deliveryItem.quantity;
+                            
+                            // Check if product is out of stock and add notification
+                            if (product.quantity === 0) {
+                                addNotification(`Producto agotado: ${product.name} para ${users[currentUser].name}`);
+                            }
+                        }
+                    });
+                    
+                    // Add to history
+                    deliveryHistory.push(deliveryRecord);
+                    
+                    // Generate PDF
+                    generateDeliveryPDF(deliveryRecord);
+                    
+                    // Reset delivery items
+                    deliveryItems = [];
+                    updateDeliveryDisplay();
+                    
+                    // Save data
+                    saveToLocalStorage();
+                    
+                    showNotification('Entrega generada exitosamente');
+                }
+            );
+        }
+
+        // Generate low items
+        function generateLow() {
+            if (lowItems.length === 0) {
+                showNotification('No hay productos para dar de baja', true);
+                return;
+            }
+            
+            showConfirmationModal(
+                'Confirmar Bajas',
+                '¿Estás seguro de que deseas realizar las bajas? Esta acción no se puede deshacer.',
+                () => {
+                    // Create low record
+                    const lowRecord = {
+                        id: Date.now(),
+                        date: new Date(),
+                        user: currentUser,
+                        items: [...lowItems],
+                        total: lowItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+                    };
+                    
+                    // Update inventory
+                    lowItems.forEach(lowItem => {
+                        const product = users[currentUser].inventory.find(p => p.id === lowItem.id);
+                        if (product) {
+                            product.quantity -= lowItem.quantity;
+                            
+                            // Check if product is out of stock and add notification
+                            if (product.quantity === 0) {
+                                addNotification(`Producto agotado: ${product.name} para ${users[currentUser].name}`);
+                            }
+                        }
+                    });
+                    
+                    // Add to history
+                    lowHistory.push(lowRecord);
+                    
+                    // Generate PDF
+                    generateLowPDF(lowRecord);
+                    
+                    // Reset low items
+                    lowItems = [];
+                    updateLowDisplay();
+                    
+                    // Save data
+                    saveToLocalStorage();
+                    
+                    showNotification('Bajas realizadas exitosamente');
+                }
+            );
+        }
+
+        // Generate delivery PDF
+        function generateDeliveryPDF(deliveryRecord) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.text('Comprobante de Entrega', 105, 15, { align: 'center' });
+            
+            // Details
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${new Date(deliveryRecord.date).toLocaleString()}`, 14, 25);
+            doc.text(`Vendedor: ${users[deliveryRecord.user].name}`, 14, 32);
+            
+            // Table
+            const tableData = deliveryRecord.items.map(item => [
+                item.name,
+                item.quantity,
+                `$${item.price.toFixed(2)}`,
+                `$${(item.price * item.quantity).toFixed(2)}`
+            ]);
+            
+            tableData.push([
+                'TOTAL',
+                '',
+                '',
+                `$${deliveryRecord.total.toFixed(2)}`
+            ]);
+            
+            doc.autoTable({
+                startY: 40,
+                head: [['Producto', 'Cantidad', 'Precio', 'Subtotal']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [44, 62, 80] }
+            });
+            
+            // Save PDF
+            const pdfBlob = doc.output('blob');
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            
+            // Store PDF URL in history record
+            deliveryRecord.pdfUrl = pdfUrl;
+            
+            // For immediate download
+            doc.save(`entrega_${deliveryRecord.id}.pdf`);
+        }
+
+        // Generate low PDF
+        function generateLowPDF(lowRecord) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.text('Comprobante de Baja', 105, 15, { align: 'center' });
+            
+            // Details
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${new Date(lowRecord.date).toLocaleString()}`, 14, 25);
+            doc.text(`Vendedor: ${users[lowRecord.user].name}`, 14, 32);
+            
+            // Table
+            const tableData = lowRecord.items.map(item => [
+                item.name,
+                item.quantity,
+                `$${item.price.toFixed(2)}`,
+                `$${(item.price * item.quantity).toFixed(2)}`
+            ]);
+            
+            doc.autoTable({
+                startY: 40,
+                head: [['Producto', 'Cantidad', 'Precio', 'Subtotal']],
+                body: tableData,
+                theme: 'grid',
+                headStyles: { fillColor: [44, 62, 80] }
+            });
+            
+            // Save PDF
+            const pdfBlob = doc.output('blob');
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            
+            // Store PDF URL in history record
+            lowRecord.pdfUrl = pdfUrl;
+            
+            // For immediate download
+            doc.save(`baja_${lowRecord.id}.pdf`);
+        }
+
+        // Download PDF
+        function downloadPDF(type, recordId) {
+            let record;
+            
+            if (type === 'delivery') {
+                record = deliveryHistory.find(r => r.id === recordId);
+            } else {
+                record = lowHistory.find(r => r.id === recordId);
+            }
+            
+            if (record && record.pdfUrl) {
+                const a = document.createElement('a');
+                a.href = record.pdfUrl;
+                a.download = `${type}_${recordId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                showNotification('PDF no disponible', true);
             }
         }
 
-        function mostrarNotificacion(mensaje, tipo = 'success') {
-            notification.textContent = mensaje;
-            notification.className = 'notification';
-            if (tipo === 'error') {
-                notification.classList.add('error');
+        // Load admin deliveries
+        function loadAdminDeliveries() {
+            const adminDeliveriesList = document.getElementById('admin-deliveries-list');
+            adminDeliveriesList.innerHTML = '';
+            
+            deliveryHistory.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>Vendedor:</strong> ${users[record.user].name} <br>
+                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
+                        <strong>Total:</strong> $${record.total.toFixed(2)}
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="downloadPDF('delivery', ${record.id})">Descargar PDF</button>
+                    </div>
+                `;
+                adminDeliveriesList.appendChild(historyItem);
+            });
+        }
+
+        // Load admin lows
+        function loadAdminLows() {
+            const adminLowsList = document.getElementById('admin-lows-list');
+            adminLowsList.innerHTML = '';
+            
+            lowHistory.forEach(record => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>Vendedor:</strong> ${users[record.user].name} <br>
+                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
+                        <strong>Productos:</strong> ${record.items.length}
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="downloadPDF('low', ${record.id})">Descargar PDF</button>
+                        <button class="btn btn-success" onclick="approveLow(${record.id})">Aprobar</button>
+                    </div>
+                `;
+                adminLowsList.appendChild(historyItem);
+            });
+        }
+
+        // Approve low
+        function approveLow(recordId) {
+            const record = lowHistory.find(r => r.id === recordId);
+            if (!record) return;
+            
+            // Mark as approved
+            record.approved = true;
+            
+            // Save data
+            saveToLocalStorage();
+            
+            showNotification('Baja aprobada exitosamente');
+        }
+
+        // Load user inventory for admin
+        function loadUserInventory() {
+            const userSelect = document.getElementById('user-select');
+            const selectedUser = userSelect.value;
+            const inventoryContainer = document.getElementById('admin-inventory-items');
+            inventoryContainer.innerHTML = '';
+            
+            const userInventory = users[selectedUser].inventory;
+            userInventory.sort((a, b) => a.name.localeCompare(b.name));
+            
+            userInventory.forEach(product => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>$${parseFloat(product.price).toFixed(2)}</td>
+                    <td>${product.quantity}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteProduct('${selectedUser}', ${product.id})">Eliminar</button>
+                    </td>
+                `;
+                inventoryContainer.appendChild(tr);
+            });
+        }
+
+        // Add new product
+        function addNewProduct() {
+            const userSelect = document.getElementById('user-select');
+            const selectedUser = userSelect.value;
+            const nameInput = document.getElementById('new-product-name');
+            const priceInput = document.getElementById('new-product-price');
+            const quantityInput = document.getElementById('new-product-quantity');
+            
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value);
+            const quantity = parseInt(quantityInput.value);
+            
+            if (!name || isNaN(price) || isNaN(quantity) || price <= 0 || quantity < 0) {
+                showNotification('Por favor ingresa valores válidos', true);
+                return;
             }
+            
+            // Generate unique ID
+            const newId = Math.max(0, ...users[selectedUser].inventory.map(p => p.id)) + 1;
+            
+            // Add product
+            users[selectedUser].inventory.push({
+                id: newId,
+                name: name,
+                price: price,
+                quantity: quantity
+            });
+            
+            // Clear inputs
+            nameInput.value = '';
+            priceInput.value = '';
+            quantityInput.value = '';
+            
+            // Reload inventory
+            loadUserInventory();
+            
+            // Save data
+            saveToLocalStorage();
+            
+            showNotification('Producto agregado exitosamente');
+        }
+
+        // Delete product
+        function deleteProduct(user, productId) {
+            showConfirmationModal(
+                'Eliminar Producto',
+                '¿Estás seguro de que deseas eliminar este producto?',
+                () => {
+                    users[user].inventory = users[user].inventory.filter(p => p.id !== productId);
+                    loadUserInventory();
+                    saveToLocalStorage();
+                    showNotification('Producto eliminado exitosamente');
+                }
+            );
+        }
+
+        // Load notifications
+        function loadNotifications() {
+            const notificationsList = document.getElementById('notifications-list');
+            notificationsList.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = '<p>No hay notificaciones</p>';
+                return;
+            }
+            
+            notifications.forEach(notification => {
+                const notificationItem = document.createElement('div');
+                notificationItem.className = 'history-item';
+                notificationItem.innerHTML = `
+                    <div>
+                        <strong>${new Date(notification.date).toLocaleString()}</strong> <br>
+                        ${notification.message}
+                    </div>
+                `;
+                notificationsList.appendChild(notificationItem);
+            });
+        }
+
+        // Add notification
+        function addNotification(message) {
+            notifications.push({
+                id: Date.now(),
+                date: new Date(),
+                message: message
+            });
+            
+            saveToLocalStorage();
+        }
+
+        // Show notification
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = isError ? 'notification error' : 'notification';
             notification.style.display = 'block';
             
             setTimeout(() => {
@@ -1171,30 +1494,35 @@
             }, 3000);
         }
 
-        function guardarDatos() {
-            // En una implementación real, aquí se guardarían los datos en una base de datos
-            // Por ahora, usamos localStorage para persistencia básica
-            const datos = {
-                inventarios,
-                historialEntregas,
-                historialBajas,
-                notificaciones
-            };
+        // Show confirmation modal
+        function showConfirmationModal(title, message, confirmCallback) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('confirmationModal').style.display = 'flex';
             
-            localStorage.setItem('sistema_inventarios', JSON.stringify(datos));
+            window.confirmAction = confirmCallback;
         }
 
-        function cargarDatosAlmacenados() {
-            const datosGuardados = localStorage.getItem('sistema_inventarios');
-            
-            if (datosGuardados) {
-                const datos = JSON.parse(datosGuardados);
-                Object.assign(inventarios, datos.inventarios);
-                historialEntregas = datos.historialEntregas || [];
-                historialBajas = datos.historialBajas || [];
-                notificaciones = datos.notificaciones || [];
-            }
+        // Close modal
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
         }
+
+        // Confirm action
+        function confirmAction() {
+            if (typeof window.confirmAction === 'function') {
+                window.confirmAction();
+            }
+            closeModal();
+        }
+
+        // Initialize the application
+        window.onload = function() {
+            initializeData();
+            
+            // Check if user is already logged in (for demo purposes)
+            // In a real application, you would check from session storage or cookies
+        };
     </script>
 </body>
 </html>
