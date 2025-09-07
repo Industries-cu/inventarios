@@ -1,8 +1,3 @@
-Aquí está la lista completa de todos los productos de la hoja "isaac" en el formato JSON que necesitas, excluyendo aquellos con cantidad cero.
-
-He procesado todos los productos de la hoja, extrayendo el nombre, la cantidad y el precio para que puedas actualizar tu inventario fácilmente.
-
-```json
 [
   {
     "nombre": "manillas",
@@ -519,6 +514,7 @@ He procesado todos los productos de la hoja, extrayendo el nombre, la cantidad y
     "cantidad": 1,
     "precio": 1500
   }
-]
+
+
 
 
