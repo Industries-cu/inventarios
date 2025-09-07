@@ -1,48 +1,524 @@
-{
-  "inventario": [
-    {
-      "nombre": "Teclado Mecánico",
-      "precio": 75.5,
-      "cantidad": 42
-    },
-    {
-      "nombre": "Mouse Gamer",
-      "precio": 45,
-      "cantidad": 120
-    },
-    {
-      "nombre": "Monitor Curvo 27''",
-      "precio": 250,
-      "cantidad": 30
-    },
-    {
-      "nombre": "Auriculares Inalámbricos",
-      "precio": 90,
-      "cantidad": 85
-    },
-    {
-      "nombre": "Disco Duro SSD 1TB",
-      "precio": 110,
-      "cantidad": 70
-    },
-    {
-      "nombre": "perros",
-      "cantidad": 2,
-      "precio": 56
-    },
-    {
-      "nombre": "hato",
-      "cantidad": 211,
-      "precio": 312
-    },
-    {
-      "nombre": "canario",
-      "cantidad": 1000,
-      "precio": 10
-    }
-  ],
-  "registros_entrega": [],
-  "registros_baja": []
-}
+Aquí está la lista completa de todos los productos de la hoja "isaac" en el formato JSON que necesitas, excluyendo aquellos con cantidad cero.
+
+He procesado todos los productos de la hoja, extrayendo el nombre, la cantidad y el precio para que puedas actualizar tu inventario fácilmente.
+
+```json
+[
+  {
+    "nombre": "manillas",
+    "cantidad": 7,
+    "precio": 1500
+  },
+  {
+    "nombre": "mascaras",
+    "cantidad": 5,
+    "precio": 1100
+  },
+  {
+    "nombre": "cartera",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "guantes",
+    "cantidad": 3,
+    "precio": 1500
+  },
+  {
+    "nombre": "ligas",
+    "cantidad": 30,
+    "precio": 30
+  },
+  {
+    "nombre": "dedales",
+    "cantidad": 2,
+    "precio": 150
+  },
+  {
+    "nombre": "pelotas",
+    "cantidad": 3,
+    "precio": 300
+  },
+  {
+    "nombre": "proyectores bocina",
+    "cantidad": 2,
+    "precio": 4000
+  },
+  {
+    "nombre": "proyectores",
+    "cantidad": 10,
+    "precio": 3500
+  },
+  {
+    "nombre": "proyectores discoteca",
+    "cantidad": 2,
+    "precio": 4000
+  },
+  {
+    "nombre": "lamp mosquito",
+    "cantidad": 2,
+    "precio": 2400
+  },
+  {
+    "nombre": "casco gamer",
+    "cantidad": 2,
+    "precio": 4500
+  },
+  {
+    "nombre": "pasta termica",
+    "cantidad": 15,
+    "precio": 200
+  },
+  {
+    "nombre": "docking",
+    "cantidad": 1,
+    "precio": 2000
+  },
+  {
+    "nombre": "adaptador audio usb",
+    "cantidad": 2,
+    "precio": 2000
+  },
+  {
+    "nombre": "filtros",
+    "cantidad": 2,
+    "precio": 600
+  },
+  {
+    "nombre": "neon",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "regleta usb 2.0",
+    "cantidad": 1,
+    "precio": 700
+  },
+  {
+    "nombre": "audifono cable",
+    "cantidad": 1,
+    "precio": 350
+  },
+  {
+    "nombre": "tarjetas 32gb",
+    "cantidad": 4,
+    "precio": 1600
+  },
+  {
+    "nombre": "memorias 64gb",
+    "cantidad": 3,
+    "precio": 2000
+  },
+  {
+    "nombre": "cintos",
+    "cantidad": 4,
+    "precio": 800
+  },
+  {
+    "nombre": "anillos",
+    "cantidad": 17,
+    "precio": 100
+  },
+  {
+    "nombre": "cepillos electrico",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "set de uña",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "reproductor de carro",
+    "cantidad": 2,
+    "precio": 950
+  },
+  {
+    "nombre": "relojes",
+    "cantidad": 8,
+    "precio": 1650
+  },
+  {
+    "nombre": "riñonera mujer",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "cartera",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "cintillo con orejas",
+    "cantidad": 1,
+    "precio": 250
+  },
+  {
+    "nombre": "reloj inteligente",
+    "cantidad": 2,
+    "precio": 4500
+  },
+  {
+    "nombre": "reloj inteligente",
+    "cantidad": 1,
+    "precio": 4000
+  },
+  {
+    "nombre": "relojes led",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "mini linterna",
+    "cantidad": 1,
+    "precio": 1000
+  },
+  {
+    "nombre": "llaveros",
+    "cantidad": 2,
+    "precio": 70
+  },
+  {
+    "nombre": "audifono de diadema",
+    "cantidad": 1,
+    "precio": 2000
+  },
+  {
+    "nombre": "audifono de cable",
+    "cantidad": 1,
+    "precio": 350
+  },
+  {
+    "nombre": "microfono usb",
+    "cantidad": 1,
+    "precio": 800
+  },
+  {
+    "nombre": "mause vertical",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "regleta",
+    "cantidad": 1,
+    "precio": 600
+  },
+  {
+    "nombre": "lampara led",
+    "cantidad": 1,
+    "precio": 1000
+  },
+  {
+    "nombre": "lampara de mesa",
+    "cantidad": 2,
+    "precio": 1500
+  },
+  {
+    "nombre": "linterna de mano",
+    "cantidad": 2,
+    "precio": 1800
+  },
+  {
+    "nombre": "linterna de cabeza",
+    "cantidad": 1,
+    "precio": 2200
+  },
+  {
+    "nombre": "candado bicicleta",
+    "cantidad": 1,
+    "precio": 2500
+  },
+  {
+    "nombre": "power bank",
+    "cantidad": 1,
+    "precio": 5000
+  },
+  {
+    "nombre": "linterna rompe ventana",
+    "cantidad": 1,
+    "precio": 2000
+  },
+  {
+    "nombre": "termos",
+    "cantidad": 2,
+    "precio": 2600
+  },
+  {
+    "nombre": "mochilas",
+    "cantidad": 1,
+    "precio": 5500
+  },
+  {
+    "nombre": "ventilador recargable",
+    "cantidad": 2,
+    "precio": 4000
+  },
+  {
+    "nombre": "ventilador recargable",
+    "cantidad": 2,
+    "precio": 5500
+  },
+  {
+    "nombre": "mause normal",
+    "cantidad": 1,
+    "precio": 1000
+  },
+  {
+    "nombre": "lampara",
+    "cantidad": 1,
+    "precio": 2800
+  },
+  {
+    "nombre": "reloj",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "audifono bluetooth",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "audifono de cuello",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "maquina de afeitar",
+    "cantidad": 1,
+    "precio": 2500
+  },
+  {
+    "nombre": "bombillos",
+    "cantidad": 1,
+    "precio": 300
+  },
+  {
+    "nombre": "bombillos",
+    "cantidad": 1,
+    "precio": 3500
+  },
+  {
+    "nombre": "bateria de audifono",
+    "cantidad": 1,
+    "precio": 2000
+  },
+  {
+    "nombre": "ventilador recargable",
+    "cantidad": 7,
+    "precio": 4000
+  },
+  {
+    "nombre": "maus más sencillo",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "tiras led 10m",
+    "cantidad": 1,
+    "precio": 4000
+  },
+  {
+    "nombre": "bombillo de 2 pilas",
+    "cantidad": 4,
+    "precio": 2600
+  },
+  {
+    "nombre": "cables nebro",
+    "cantidad": 7,
+    "precio": 800
+  },
+  {
+    "nombre": "lamparas fina nuevas",
+    "cantidad": 5,
+    "precio": 3200
+  },
+  {
+    "nombre": "lamparas con pilas normales",
+    "cantidad": 1,
+    "precio": 4200
+  },
+  {
+    "nombre": "LINTERNA DE CABEZA MALAS",
+    "cantidad": 2,
+    "precio": 2100
+  },
+  {
+    "nombre": "juego de afeitar",
+    "cantidad": 1,
+    "precio": 700
+  },
+  {
+    "nombre": "audifonos inalambricos",
+    "cantidad": 2,
+    "precio": 2500
+  },
+  {
+    "nombre": "telefonos",
+    "cantidad": 3,
+    "precio": 4500
+  },
+  {
+    "nombre": "resistencia",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "pasamontañas",
+    "cantidad": 12,
+    "precio": 700
+  },
+  {
+    "nombre": "cascos gamer",
+    "cantidad": 1,
+    "precio": 5500
+  },
+  {
+    "nombre": "casco p75",
+    "cantidad": 2,
+    "precio": 4500
+  },
+  {
+    "nombre": "bosina carro",
+    "cantidad": 2,
+    "precio": 3700
+  },
+  {
+    "nombre": "humidificador",
+    "cantidad": 1,
+    "precio": 2100
+  },
+  {
+    "nombre": "cables nebro",
+    "cantidad": 3,
+    "precio": 800
+  },
+  {
+    "nombre": "cuchillos negrtos",
+    "cantidad": 1,
+    "precio": 3700
+  },
+  {
+    "nombre": "adaptador wifi",
+    "cantidad": 1,
+    "precio": 1700
+  },
+  {
+    "nombre": "audifonos inalambricos",
+    "cantidad": 4,
+    "precio": 2500
+  },
+  {
+    "nombre": "batidora recargable",
+    "cantidad": 2,
+    "precio": 4000
+  },
+  {
+    "nombre": "reloj de pared",
+    "cantidad": 2,
+    "precio": 1800
+  },
+  {
+    "nombre": "pulseras",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "tarjetas sd 16gb",
+    "cantidad": 2,
+    "precio": 1200
+  },
+  {
+    "nombre": "bombillo",
+    "cantidad": 4,
+    "precio": 300
+  },
+  {
+    "nombre": "linterna recargable",
+    "cantidad": 1,
+    "precio": 2500
+  },
+  {
+    "nombre": "llaveros",
+    "cantidad": 1,
+    "precio": 100
+  },
+  {
+    "nombre": "correa",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "audifonos de diadema",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "audifonos",
+    "cantidad": 1,
+    "precio": 1000
+  },
+  {
+    "nombre": "audifono de cuello",
+    "cantidad": 1,
+    "precio": 1200
+  },
+  {
+    "nombre": "maus",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "ventilador de mano",
+    "cantidad": 1,
+    "precio": 2500
+  },
+  {
+    "nombre": "lampara de mesa",
+    "cantidad": 1,
+    "precio": 1500
+  },
+  {
+    "nombre": "protector de voltaje",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "camara de seguridad",
+    "cantidad": 1,
+    "precio": 3500
+  },
+  {
+    "nombre": "pilas de litio",
+    "cantidad": 2,
+    "precio": 650
+  },
+  {
+    "nombre": "audifono bluetooth",
+    "cantidad": 1,
+    "precio": 1800
+  },
+  {
+    "nombre": "reloj de hombre",
+    "cantidad": 1,
+    "precio": 1700
+  },
+  {
+    "nombre": "power bank",
+    "cantidad": 1,
+    "precio": 4500
+  },
+  {
+    "nombre": "set de cuchillos",
+    "cantidad": 1,
+    "precio": 2800
+  },
+  {
+    "nombre": "reloj",
+    "cantidad": 1,
+    "precio": 1500
+  }
+]
 
 
