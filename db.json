@@ -34,8 +34,15 @@
       "nombre": "hato",
       "cantidad": 211,
       "precio": 312
+    },
+    {
+      "nombre": "canario",
+      "cantidad": 1000,
+      "precio": 10
     }
   ],
   "registros_entrega": [],
   "registros_baja": []
 }
+
+
