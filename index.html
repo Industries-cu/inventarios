@@ -358,10 +358,12 @@
 
         const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
 
-        // Función para cargar el archivo JSON
+        // Función para cargar el archivo JSON y evitar el caché
         async function loadInventory() {
             try {
-                const response = await fetch('db.json');
+                // Agrega una marca de tiempo a la URL para evitar el caché del navegador
+                const cacheBuster = new Date().getTime();
+                const response = await fetch(`db.json?v=${cacheBuster}`);
                 if (!response.ok) {
                     throw new Error('No se pudo cargar el archivo db.json');
                 }
