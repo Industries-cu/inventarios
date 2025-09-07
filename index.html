@@ -349,27 +349,35 @@
 
     <script>
         // Script de JavaScript
-        // Configuración de la base de datos (simulada)
-        let db = {
-            "inventario": [
-                { "nombre": "Teclado Mecánico", "precio": 75.50, "cantidad": 50 },
-                { "nombre": "Mouse Gamer", "precio": 45.00, "cantidad": 120 },
-                { "nombre": "Monitor Curvo 27''", "precio": 250.00, "cantidad": 30 },
-                { "nombre": "Auriculares Inalámbricos", "precio": 90.00, "cantidad": 85 },
-                { "nombre": "Disco Duro SSD 1TB", "precio": 110.00, "cantidad": 70 }
-            ],
-            "registros_entrega": [],
-            "registros_baja": []
-        };
+        let db; // La variable `db` se inicializará después de cargar el JSON
 
         const users = {
             'Isaac': 'Pepe1',
             'Admin': 'Ludmila76'
         };
 
-        let currentInventario = [...db.inventario];
-        let registroEntrega = JSON.parse(localStorage.getItem('registroEntrega')) || [];
-        let registroBaja = JSON.parse(localStorage.getItem('registroBaja')) || [];
+        // Función para cargar el archivo JSON
+        async function loadInventory() {
+            try {
+                const response = await fetch('db.json');
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar el archivo db.json');
+                }
+                const data = await response.json();
+                db = data;
+                // Inicializa los registros después de cargar el inventario
+                currentInventario = [...db.inventario];
+                registroEntrega = JSON.parse(localStorage.getItem('registroEntrega')) || [];
+                registroBaja = JSON.parse(localStorage.getItem('registroBaja')) || [];
+            } catch (error) {
+                console.error(error);
+                alert('No se pudo cargar el inventario. Asegúrate de que el archivo db.json esté en la misma carpeta.');
+                db = { "inventario": [], "registros_entrega": [], "registros_baja": [] }; // Carga un inventario vacío si hay un error
+            }
+        }
+
+        // Cargar el inventario cuando la página se carga
+        document.addEventListener('DOMContentLoaded', loadInventory);
 
         // Funciones del Vendedor
         function renderInventario() {
