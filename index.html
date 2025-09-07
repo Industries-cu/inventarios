@@ -3,1526 +3,672 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión de Inventarios</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <title>Inventario Web</title>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --light: #ecf0f1;
-            --dark: #34495e;
-        }
-        
-        * {
+        /* Estilos CSS mejorados */
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 50px;
         }
-        
-        body {
-            background-color: #f5f7fa;
-            color: #333;
-        }
-        
+
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
         }
-        
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .header-content {
+
+        .auth-container, .panel-container {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            width: 100%;
         }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        .auth-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 400px;
-            margin: 100px auto;
-        }
-        
-        .auth-form h2 {
+
+        h1 {
+            color: #333;
             text-align: center;
-            margin-bottom: 20px;
-            color: var(--primary);
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        .btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-            width: 100%;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-        
-        .btn-success {
-            background-color: var(--success);
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background-color: #27ae60;
-        }
-        
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-        
-        .btn-warning {
-            background-color: var(--warning);
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            background-color: #e67e22;
-        }
-        
-        .dashboard {
-            display: none;
-        }
-        
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .control-btn {
-            padding: 10px 15px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .control-btn.active {
-            background-color: var(--secondary);
-        }
-        
-        .search-container {
-            margin-bottom: 20px;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        .results-container {
             margin-bottom: 30px;
         }
-        
-        .product-list {
-            list-style: none;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            max-height: 300px;
-            overflow-y: auto;
+
+        .auth-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        
-        .product-item {
+
+        .auth-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .auth-form button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .panel-header {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            color: #555;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        .panel-vendedor, .panel-admin {
+            width: 100%;
+        }
+
+        .panel-vendedor .buttons-section, .panel-admin .buttons-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .panel-vendedor .buttons-section button, .panel-admin .buttons-section button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #btn-registro-entrega {
+            background-color: #28a745;
+        }
+        #btn-registro-baja {
+            background-color: #dc3545;
+        }
+        #btn-inventario-total {
+            background-color: #007BFF;
+        }
+
+        #btn-registro-entrega:hover {
+            background-color: #218838;
+        }
+        #btn-registro-baja:hover {
+            background-color: #c82333;
+        }
+        #btn-inventario-total:hover {
+            background-color: #0056b3;
+        }
+
+        #search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        #inventario-results {
+            width: 100%;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .producto {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
             border-bottom: 1px solid #eee;
         }
         
-        .product-item:last-child {
+        .producto:last-child {
             border-bottom: none;
         }
-        
-        .product-info {
-            flex: 1;
+
+        .producto-info {
+            flex-grow: 1;
         }
-        
-        .product-name {
-            font-weight: 500;
+
+        .producto-actions button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            margin-left: 10px;
         }
-        
-        .product-price {
-            color: #777;
+
+        .btn-agregar {
+            background-color: #17a2b8; /* Azul claro */
         }
-        
-        .product-actions {
-            display: flex;
-            gap: 10px;
+        .btn-dar-baja {
+            background-color: #fd7e14; /* Rojo claro */
         }
-        
-        .section {
-            display: none;
-            margin-bottom: 30px;
-            background: white;
-            border-radius: 8px;
+
+        .registros-container {
+            margin-top: 20px;
+            background-color: #f9f9f9;
             padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
         }
-        
-        .section.active {
-            display: block;
-        }
-        
-        .section-title {
-            margin-bottom: 15px;
+
+        .registros-container h3 {
+            border-bottom: 1px solid #ccc;
             padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            color: var(--primary);
+            margin-bottom: 15px;
         }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-        
-        .total-row {
-            font-weight: bold;
-            background-color: #f8f9fa;
-        }
-        
-        .admin-panel {
-            display: none;
-        }
-        
-        .admin-nav {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 4px;
-            color: white;
-            background-color: var(--success);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: none;
-            z-index: 1000;
-        }
-        
-        .notification.error {
-            background-color: var(--danger);
-        }
-        
-        .history-item {
-            padding: 15px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-            margin-bottom: 10px;
+
+        .registro-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dotted #ccc;
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+        .registro-item:last-child {
+            border-bottom: none;
         }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px;
+
+        .total-registro {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #333;
+            text-align: right;
+        }
+
+        .complete-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 12px 15px;
+            border: none;
             border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 16px;
         }
-        
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
+
+        .btn-quitar {
+            background-color: #dc3545;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
+        .panel-admin .buttons-section button {
+            background-color: #6c757d;
+        }
+
+        .panel-admin .buttons-section button:hover {
+            background-color: #5a6268;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 12px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 8px;
             margin-top: 20px;
         }
-        
-        @media (max-width: 768px) {
-            .controls, .admin-nav {
-                flex-direction: column;
-            }
-            
-            .product-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .product-actions {
-                margin-top: 10px;
-                width: 100%;
-                justify-content: space-between;
-            }
+
+        .pdf-preview {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
         }
+
+        .pdf-preview h4 {
+            margin-top: 0;
+        }
+
+        .confirm-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
-    <header>
-        <div class="container header-content">
-            <div class="logo">Sistema de Gestión</div>
-            <div id="userDisplay"></div>
-        </div>
-    </header>
 
     <div class="container">
-        <!-- Login Form -->
-        <div id="loginContainer" class="auth-container">
-            <div class="auth-form">
-                <h2>Iniciar Sesión</h2>
-                <div class="form-group">
-                    <label for="username">Usuario</label>
-                    <input type="text" id="username" placeholder="Ingresa tu usuario">
-                </div>
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" placeholder="Ingresa tu contraseña">
-                </div>
-                <button class="btn btn-primary" onclick="login()">Ingresar</button>
-            </div>
+        <div class="auth-container" id="auth-container">
+            <h1>Bienvenido a Inventario Web</h1>
+            <form class="auth-form" id="login-form">
+                <input type="text" id="username" placeholder="Usuario" required>
+                <input type="password" id="password" placeholder="Contraseña" required>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
         </div>
 
-        <!-- User Dashboard -->
-        <div id="userDashboard" class="dashboard">
-            <div class="user-info">
-                <h2 id="welcomeMessage">Bienvenido, Usuario</h2>
-                <div>
-                    <span id="deliveryTotal">Saldo de entrega: $0.00</span>
-                </div>
+        <div class="panel-container hidden" id="vendedor-panel">
+            <div class="panel-header">
+                <h2 id="welcome-message"></h2>
+                <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
             </div>
-
-            <div class="controls">
-                <button class="control-btn active" data-section="delivery-section">Entrega</button>
-                <button class="control-btn" data-section="low-section">Baja Defecto</button>
-                <button class="control-btn" data-section="inventory-section">Inventario General</button>
-                <button class="control-btn" data-section="history-section">Historial</button>
-                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
-            </div>
-
-            <!-- Delivery Section -->
-            <div id="delivery-section" class="section active">
-                <h3 class="section-title">Productos para Entrega</h3>
-                <table id="delivery-table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Subtotal</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="delivery-items">
-                        <!-- Delivery items will be added here -->
-                    </tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="3">Total a Pagar</td>
-                            <td id="delivery-total">$0.00</td>
-                            <td>
-                                <button class="btn btn-success" onclick="generateDelivery()">Generar Entrega</button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!-- Low Products Section -->
-            <div id="low-section" class="section">
-                <h3 class="section-title">Productos para Baja</h3>
-                <table id="low-table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="low-items">
-                        <!-- Low items will be added here -->
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4">
-                                <button class="btn btn-danger" onclick="generateLow()">Realizar Bajas</button>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!-- Inventory Section -->
-            <div id="inventory-section" class="section">
-                <h3 class="section-title">Inventario General</h3>
-                <table id="inventory-table">
-                    <thead>
-                        <tr>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-items">
-                        <!-- Inventory items will be added here -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- History Section -->
-            <div id="history-section" class="section">
-                <h3 class="section-title">Historial</h3>
-                <div id="history-tabs">
-                    <button class="control-btn active" data-history="delivery-history">Entregas</button>
-                    <button class="control-btn" data-history="low-history">Bajas</button>
-                </div>
-                
-                <div id="delivery-history" class="history-content">
-                    <h4>Historial de Entregas</h4>
-                    <div id="delivery-history-list">
-                        <!-- Delivery history will be added here -->
-                    </div>
-                </div>
-                
-                <div id="low-history" class="history-content" style="display: none;">
-                    <h4>Historial de Bajas</h4>
-                    <div id="low-history-list">
-                        <!-- Low history will be added here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search Section -->
-            <div class="search-container">
-                <input type="text" id="search-input" class="search-input" placeholder="Buscar producto por nombre o precio..." oninput="searchProducts()">
-            </div>
-
-            <div class="results-container">
-                <ul id="search-results" class="product-list">
-                    <!-- Search results will appear here -->
-                </ul>
-            </div>
-        </div>
-
-        <!-- Admin Panel -->
-        <div id="adminPanel" class="admin-panel">
-            <h2>Panel de Administrador</h2>
             
-            <div class="admin-nav">
-                <button class="control-btn active" data-admin="deliveries-admin">Historial de Entregas</button>
-                <button class="control-btn" data-admin="lows-admin">Historial de Bajas</button>
-                <button class="control-btn" data-admin="inventory-admin">Gestión de Inventarios</button>
-                <button class="control-btn" data-admin="notifications-admin">Notificaciones</button>
-                <button class="btn btn-danger" onclick="logout()">Cerrar Sesión</button>
-            </div>
+            <div class="panel-vendedor">
+                <div class="buttons-section">
+                    <button id="btn-registro-entrega">Registro de Entrega</button>
+                    <button id="btn-registro-baja">Registro de Baja</button>
+                    <button id="btn-inventario-total">Inventario Total</button>
+                </div>
 
-            <!-- Admin Deliveries Section -->
-            <div id="deliveries-admin" class="section active">
-                <h3 class="section-title">Historial de Entregas</h3>
-                <div id="admin-deliveries-list">
-                    <!-- Admin deliveries will be added here -->
-                </div>
-            </div>
-
-            <!-- Admin Lows Section -->
-            <div id="lows-admin" class="section">
-                <h3 class="section-title">Historial de Bajas</h3>
-                <div id="admin-lows-list">
-                    <!-- Admin lows will be added here -->
-                </div>
-            </div>
-
-            <!-- Admin Inventory Section -->
-            <div id="inventory-admin" class="section">
-                <h3 class="section-title">Gestión de Inventarios</h3>
-                <div class="form-group">
-                    <label for="user-select">Seleccionar Vendedor:</label>
-                    <select id="user-select" onchange="loadUserInventory()">
-                        <option value="usuario1">Isaac</option>
-                        <option value="usuario2">Vendedor 2</option>
-                        <option value="usuario3">Vendedor 3</option>
-                        <option value="usuario4">Vendedor 4</option>
-                        <option value="usuario5">Vendedor 5</option>
-                    </select>
-                </div>
-                
-                <div id="admin-inventory-container">
-                    <table id="admin-inventory-table">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-inventory-items">
-                            <!-- Admin inventory items will be added here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <h4>Agregar Nuevo Producto</h4>
-                    <div class="form-group">
-                        <input type="text" id="new-product-name" placeholder="Nombre del producto">
+                <div id="vendedor-content">
                     </div>
-                    <div class="form-group">
-                        <input type="number" id="new-product-price" placeholder="Precio" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <input type="number" id="new-product-quantity" placeholder="Cantidad">
-                    </div>
-                    <button class="btn btn-success" onclick="addNewProduct()">Agregar Producto</button>
-                </div>
+            </div>
+        </div>
+
+        <div class="panel-container hidden" id="admin-panel">
+            <div class="panel-header">
+                <h2 id="admin-welcome-message"></h2>
+                <button class="logout-btn" id="logout-btn-admin">Cerrar Sesión</button>
             </div>
 
-            <!-- Admin Notifications Section -->
-            <div id="notifications-admin" class="section">
-                <h3 class="section-title">Notificaciones</h3>
-                <div id="notifications-list">
-                    <!-- Notifications will be added here -->
+            <div class="panel-admin">
+                <div class="buttons-section">
+                    <button id="btn-editar-inventario">Editar Inventario</button>
+                    <button id="btn-cargar-entrega">Cargar Registro de Entrega</button>
+                    <button id="btn-cargar-baja">Cargar Registro de Baja</button>
                 </div>
+                <div id="admin-content">
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <h3 id="modalTitle">Confirmar acción</h3>
-            <p id="modalMessage">¿Estás seguro de que deseas realizar esta acción?</p>
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="confirmAction()">Confirmar</button>
-                <button class="btn btn-danger" onclick="closeModal()">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <script>
-        // Global variables
-        let currentUser = null;
-        let users = {
-            "usuario1": { password: "queriquera1", name: "Isaac", inventory: [] },
-            "usuario2": { password: "pass2", name: "Vendedor 2", inventory: [] },
-            "usuario3": { password: "pass3", name: "Vendedor 3", inventory: [] },
-            "usuario4": { password: "pass4", name: "Vendedor 4", inventory: [] },
-            "usuario5": { password: "pass5", name: "Vendedor 5", inventory: [] },
-            "admin": { password: "Ludmila76", name: "Administrador", inventory: [] }
+        // Script de JavaScript
+        // Configuración de la base de datos (simulada)
+        let db = {
+            "inventario": [
+                { "nombre": "Teclado Mecánico", "precio": 75.50, "cantidad": 50 },
+                { "nombre": "Mouse Gamer", "precio": 45.00, "cantidad": 120 },
+                { "nombre": "Monitor Curvo 27''", "precio": 250.00, "cantidad": 30 },
+                { "nombre": "Auriculares Inalámbricos", "precio": 90.00, "cantidad": 85 },
+                { "nombre": "Disco Duro SSD 1TB", "precio": 110.00, "cantidad": 70 }
+            ],
+            "registros_entrega": [],
+            "registros_baja": []
         };
 
-        let deliveryItems = [];
-        let lowItems = [];
-        let deliveryHistory = [];
-        let lowHistory = [];
-        let notifications = [];
+        const users = {
+            'Isaac': 'Pepe1',
+            'Admin': 'Ludmila76'
+        };
 
-        // Initialize with sample data
-        function initializeData() {
-            // Sample products for each user
-            const sampleProducts = [
-                { id: 1, name: "Producto A", price: 10.50, quantity: 20 },
-                { id: 2, name: "Producto B", price: 15.75, quantity: 15 },
-                { id: 3, name: "Producto C", price: 8.30, quantity: 30 },
-                { id: 4, name: "Producto D", price: 25.00, quantity: 10 },
-                { id: 5, name: "Producto E", price: 5.50, quantity: 50 }
-            ];
+        let currentInventario = [...db.inventario];
+        let registroEntrega = JSON.parse(localStorage.getItem('registroEntrega')) || [];
+        let registroBaja = JSON.parse(localStorage.getItem('registroBaja')) || [];
 
-            // Assign different inventories to each user
-            for (let i = 1; i <= 5; i++) {
-                const userKey = `usuario${i}`;
-                users[userKey].inventory = JSON.parse(JSON.stringify(sampleProducts));
-                
-                // Modify prices and quantities for variety
-                users[userKey].inventory.forEach((product, index) => {
-                    product.price = (product.price * (0.9 + (i * 0.05))).toFixed(2);
-                    product.quantity = product.quantity - (i * 2) + (index * 3);
-                    if (product.quantity < 0) product.quantity = 5;
-                });
-            }
-
-            // Load data from localStorage if available
-            loadFromLocalStorage();
-            
-            // Set up event listeners
-            setupEventListeners();
+        // Funciones del Vendedor
+        function renderInventario() {
+            const content = document.getElementById('vendedor-content');
+            content.innerHTML = `
+                <input type="text" id="search-bar" placeholder="Buscar por nombre o precio...">
+                <div id="inventario-results"></div>
+            `;
+            const searchBar = document.getElementById('search-bar');
+            searchBar.addEventListener('input', (e) => searchInventario(e.target.value));
+            searchInventario(''); // Muestra todo al inicio
         }
 
-        // Load data from localStorage
-        function loadFromLocalStorage() {
-            try {
-                const usersData = localStorage.getItem('usersData');
-                if (usersData) {
-                    const parsedData = JSON.parse(usersData);
-                    for (const key in parsedData) {
-                        if (users[key]) {
-                            users[key].inventory = parsedData[key].inventory || users[key].inventory;
-                        }
-                    }
-                }
+        function searchInventario(query) {
+            const resultsDiv = document.getElementById('inventario-results');
+            resultsDiv.innerHTML = '';
+            const normalizedQuery = query.toLowerCase();
 
-                const deliveryHistoryData = localStorage.getItem('deliveryHistory');
-                if (deliveryHistoryData) {
-                    deliveryHistory = JSON.parse(deliveryHistoryData);
-                }
+            const filtered = currentInventario.filter(item =>
+                item.nombre.toLowerCase().includes(normalizedQuery) ||
+                item.precio.toString().includes(normalizedQuery)
+            );
 
-                const lowHistoryData = localStorage.getItem('lowHistory');
-                if (lowHistoryData) {
-                    lowHistory = JSON.parse(lowHistoryData);
-                }
-
-                const notificationsData = localStorage.getItem('notifications');
-                if (notificationsData) {
-                    notifications = JSON.parse(notificationsData);
-                }
-            } catch (e) {
-                console.error("Error loading data from localStorage:", e);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const productoDiv = document.createElement('div');
+                    productoDiv.className = 'producto';
+                    productoDiv.innerHTML = `
+                        <div class="producto-info">
+                            <strong>${item.nombre}</strong> - Cantidad: ${item.cantidad}, Precio: $${item.precio.toFixed(2)}
+                        </div>
+                        <div class="producto-actions">
+                            <button class="btn-agregar" onclick="addItemToRegistro('${item.nombre}', 'entrega')">Agregar</button>
+                            <button class="btn-dar-baja" onclick="addItemToRegistro('${item.nombre}', 'baja')">Dar Baja</button>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(productoDiv);
+                });
+            } else {
+                resultsDiv.innerHTML = '<p>No se encontraron productos.</p>';
             }
         }
 
-        // Save data to localStorage
-        function saveToLocalStorage() {
-            try {
-                // Save users data
-                const usersData = {};
-                for (const key in users) {
-                    usersData[key] = {
-                        inventory: users[key].inventory
-                    };
-                }
-                localStorage.setItem('usersData', JSON.stringify(usersData));
-                
-                // Save history
-                localStorage.setItem('deliveryHistory', JSON.stringify(deliveryHistory));
-                localStorage.setItem('lowHistory', JSON.stringify(lowHistory));
-                
-                // Save notifications
-                localStorage.setItem('notifications', JSON.stringify(notifications));
-            } catch (e) {
-                console.error("Error saving data to localStorage:", e);
+        function addItemToRegistro(nombre, tipo) {
+            const item = currentInventario.find(i => i.nombre === nombre);
+            if (!item) return;
+
+            const registro = tipo === 'entrega' ? registroEntrega : registroBaja;
+            const existingItem = registro.find(i => i.nombre === nombre);
+
+            if (existingItem) {
+                existingItem.cantidad++;
+            } else {
+                registro.push({ nombre: item.nombre, precio: item.precio, cantidad: 1 });
             }
+
+            if (tipo === 'entrega') {
+                localStorage.setItem('registroEntrega', JSON.stringify(registroEntrega));
+            } else {
+                localStorage.setItem('registroBaja', JSON.stringify(registroBaja));
+            }
+
+            alert(`Producto "${nombre}" agregado al registro de ${tipo}.`);
+        }
+        
+        // Nueva función para quitar un item del registro
+        function removeItemFromRegistro(nombre, tipo) {
+            if (tipo === 'entrega') {
+                registroEntrega = registroEntrega.filter(item => item.nombre !== nombre);
+                localStorage.setItem('registroEntrega', JSON.stringify(registroEntrega));
+            } else {
+                registroBaja = registroBaja.filter(item => item.nombre !== nombre);
+                localStorage.setItem('registroBaja', JSON.stringify(registroBaja));
+            }
+            renderRegistro(tipo);
         }
 
-        // Set up event listeners
-        function setupEventListeners() {
-            // Section control buttons
-            document.querySelectorAll('.control-btn[data-section]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const sectionId = this.getAttribute('data-section');
-                    
-                    // Deactivate all buttons and sections
-                    document.querySelectorAll('.control-btn[data-section]').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    document.querySelectorAll('.section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    
-                    // Activate current button and section
-                    this.classList.add('active');
-                    document.getElementById(sectionId).classList.add('active');
-                });
-            });
+        function renderRegistro(tipo) {
+            const content = document.getElementById('vendedor-content');
+            const registro = tipo === 'entrega' ? registroEntrega : registroBaja;
+            let total = 0;
+            let itemsHtml = '';
 
-            // History tabs
-            document.querySelectorAll('.control-btn[data-history]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const historyId = this.getAttribute('data-history');
-                    
-                    // Deactivate all buttons and history content
-                    document.querySelectorAll('.control-btn[data-history]').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    document.querySelectorAll('.history-content').forEach(content => {
-                        content.style.display = 'none';
-                    });
-                    
-                    // Activate current button and history content
-                    this.classList.add('active');
-                    document.getElementById(historyId).style.display = 'block';
+            if (registro.length > 0) {
+                registro.forEach(item => {
+                    const subtotal = item.precio * item.cantidad;
+                    total += subtotal;
+                    itemsHtml += `
+                        <div class="registro-item">
+                            <span>${item.nombre} x${item.cantidad} - $${subtotal.toFixed(2)}</span>
+                            <button class="btn-quitar" onclick="removeItemFromRegistro('${item.nombre}', '${tipo}')">Quitar</button>
+                        </div>
+                    `;
                 });
-            });
+            } else {
+                itemsHtml = '<p>No hay artículos en este registro.</p>';
+            }
 
-            // Admin tabs
-            document.querySelectorAll('.control-btn[data-admin]').forEach(button => {
-                button.addEventListener('click', function() {
-                    const adminSectionId = this.getAttribute('data-admin');
-                    
-                    // Deactivate all buttons and sections
-                    document.querySelectorAll('.control-btn[data-admin]').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    document.querySelectorAll('.section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    
-                    // Activate current button and section
-                    this.classList.add('active');
-                    document.getElementById(adminSectionId).classList.add('active');
-                });
-            });
+            content.innerHTML = `
+                <div class="registros-container">
+                    <h3>Registro de ${tipo === 'entrega' ? 'Entrega' : 'Baja'}</h3>
+                    <div id="registro-list">${itemsHtml}</div>
+                    <div class="total-registro">Total: $${total.toFixed(2)}</div>
+                    <button class="complete-btn" onclick="createPDF('${tipo}')">Completar ${tipo === 'entrega' ? 'Entrega' : 'Baja'}</button>
+                </div>
+            `;
         }
 
-        // Login function
-        function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            if (!username || !password) {
-                showNotification('Por favor ingresa usuario y contraseña', true);
+        function createPDF(tipo) {
+            const registro = tipo === 'entrega' ? registroEntrega : registroBaja;
+            if (registro.length === 0) {
+                alert('El registro está vacío.');
                 return;
             }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const fecha = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
             
-            if (users[username] && users[username].password === password) {
-                currentUser = username;
-                
-                // Hide login, show appropriate dashboard
-                document.getElementById('loginContainer').style.display = 'none';
-                
-                if (username === 'admin') {
-                    document.getElementById('adminPanel').style.display = 'block';
-                    loadAdminData();
-                } else {
-                    document.getElementById('userDashboard').style.display = 'block';
-                    document.getElementById('welcomeMessage').textContent = `Bienvenido, ${users[username].name}`;
-                    loadUserData();
-                }
-                
-                showNotification(`Bienvenido ${users[username].name}`);
+            doc.setFontSize(20);
+            doc.text(`Registro de ${tipo === 'entrega' ? 'Entrega' : 'Baja'}`, 10, 10);
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${fecha}`, 10, 20);
+
+            let y = 30;
+            let total = 0;
+            registro.forEach(item => {
+                const subtotal = item.precio * item.cantidad;
+                total += subtotal;
+                doc.text(`- ${item.nombre} x${item.cantidad} - Precio: $${item.precio.toFixed(2)} - Subtotal: $${subtotal.toFixed(2)}`, 15, y);
+                y += 10;
+            });
+
+            y += 10;
+            doc.text(`Total: $${total.toFixed(2)}`, 10, y);
+
+            doc.save(`Registro_${tipo}_${fecha}.pdf`);
+            
+            // Reinicia el registro
+            if (tipo === 'entrega') {
+                registroEntrega = [];
+                localStorage.setItem('registroEntrega', JSON.stringify(registroEntrega));
             } else {
-                showNotification('Usuario o contraseña incorrectos', true);
+                registroBaja = [];
+                localStorage.setItem('registroBaja', JSON.stringify(registroBaja));
             }
+            alert('PDF creado y registro reiniciado.');
+            renderRegistro(tipo);
         }
 
-        // Logout function
+        // Funciones del Administrador
+        function renderAdminPanel() {
+            document.getElementById('admin-content').innerHTML = `
+                <p>Selecciona una opción para administrar el inventario.</p>
+            `;
+        }
+
+        function renderEditarInventario() {
+            const content = document.getElementById('admin-content');
+            content.innerHTML = `
+                <h3>Editar Inventario</h3>
+                <p>Edita el inventario directamente en el archivo JSON. Esta acción solo es para el modo local.</p>
+                `;
+        }
+        
+        async function renderCargarRegistro(tipo) {
+            const content = document.getElementById('admin-content');
+            content.innerHTML = `
+                <h3>Cargar Registro de ${tipo === 'entrega' ? 'Entrega' : 'Baja'}</h3>
+                <p>Carga el PDF del registro que te envió el vendedor para actualizar el inventario.</p>
+                <label for="file-input" class="custom-file-upload">
+                    Seleccionar Archivo PDF
+                </label>
+                <input type="file" id="file-input" accept="application/pdf">
+                <div id="pdf-preview" class="pdf-preview hidden">
+                    <h4>Contenido del PDF:</h4>
+                    <pre id="pdf-content"></pre>
+                    <button class="confirm-btn" onclick="realizarCambiosInventario('${tipo}')">Realizar Revaja de Productos</button>
+                </div>
+            `;
+            
+            document.getElementById('file-input').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    readPDF(file, tipo);
+                }
+            });
+        }
+
+        async function readPDF(file, tipo) {
+            const pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+            
+            const fileReader = new FileReader();
+            fileReader.onload = async function() {
+                const pdfData = new Uint8Array(this.result);
+                const loadingTask = pdfjsLib.getDocument({data: pdfData});
+                const pdf = await loadingTask.promise;
+                const page = await pdf.getPage(1);
+                const textContent = await page.getTextContent();
+                const items = textContent.items.map(item => item.str).join(' ');
+                
+                const previewDiv = document.getElementById('pdf-preview');
+                const contentPre = document.getElementById('pdf-content');
+                contentPre.textContent = items;
+                previewDiv.classList.remove('hidden');
+
+                // Extraer los datos para procesar
+                const lines = items.split('\n').map(line => line.trim()).filter(line => line.startsWith('- '));
+                let parsedItems = [];
+                lines.forEach(line => {
+                    const parts = line.split(' - ');
+                    const namePart = parts[0].replace('- ', '');
+                    const [nombre, cantidad] = namePart.split(' x');
+                    parsedItems.push({
+                        nombre: nombre.trim(),
+                        cantidad: parseInt(cantidad),
+                    });
+                });
+                localStorage.setItem('tempPdfData', JSON.stringify(parsedItems));
+            };
+            fileReader.readAsArrayBuffer(file);
+        }
+
+        function realizarCambiosInventario(tipo) {
+            const data = JSON.parse(localStorage.getItem('tempPdfData'));
+            if (!data || data.length === 0) {
+                alert('No se encontraron datos para procesar.');
+                return;
+            }
+
+            const confirmacion = confirm(`¿Estás seguro de que quieres ${tipo === 'entrega' ? 'reducir' : 'dar de baja'} estos productos del inventario?`);
+            if (confirmacion) {
+                // Lógica de actualización del inventario (modo local)
+                data.forEach(item => {
+                    const inventarioItem = db.inventario.find(inv => inv.nombre === item.nombre);
+                    if (inventarioItem) {
+                        inventarioItem.cantidad -= item.cantidad;
+                        if (inventarioItem.cantidad < 0) {
+                            inventarioItem.cantidad = 0;
+                        }
+                    }
+                });
+                alert('Inventario actualizado. Ahora debes subir el archivo JSON actualizado a tu repositorio de GitHub.');
+                
+                // Opcionalmente, aquí puedes mostrar el JSON para que el admin lo copie y pegue
+                console.log(JSON.stringify(db, null, 2));
+            }
+            localStorage.removeItem('tempPdfData');
+            document.getElementById('pdf-preview').classList.add('hidden');
+        }
+
+        // Lógica de Autenticación y Navegación
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (users[username] === password) {
+                document.getElementById('auth-container').classList.add('hidden');
+                if (username === 'Isaac') {
+                    document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
+                    document.getElementById('vendedor-panel').classList.remove('hidden');
+                    renderInventario();
+                } else if (username === 'Admin') {
+                    document.getElementById('admin-welcome-message').textContent = `Hola, ${username}!`;
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                    renderAdminPanel();
+                }
+            } else {
+                alert('Usuario o contraseña incorrectos.');
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            logout();
+        });
+
+        document.getElementById('logout-btn-admin').addEventListener('click', () => {
+            logout();
+        });
+
         function logout() {
-            currentUser = null;
-            deliveryItems = [];
-            lowItems = [];
-            
-            document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('userDashboard').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'none';
-            
+            document.getElementById('auth-container').classList.remove('hidden');
+            document.getElementById('vendedor-panel').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
         }
 
-        // Load user data
-        function loadUserData() {
-            updateDeliveryDisplay();
-            loadInventory();
-            loadHistory();
-        }
+        // Eventos del panel de vendedor
+        document.getElementById('btn-registro-entrega').addEventListener('click', () => renderRegistro('entrega'));
+        document.getElementById('btn-registro-baja').addEventListener('click', () => renderRegistro('baja'));
+        document.getElementById('btn-inventario-total').addEventListener('click', () => renderInventario());
 
-        // Load admin data
-        function loadAdminData() {
-            loadAdminDeliveries();
-            loadAdminLows();
-            loadUserInventory();
-            loadNotifications();
-        }
-
-        // Search products
-        function searchProducts() {
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
-            const resultsContainer = document.getElementById('search-results');
-            resultsContainer.innerHTML = '';
-            
-            if (!searchTerm) return;
-            
-            const userInventory = users[currentUser].inventory;
-            const filteredProducts = userInventory.filter(product => 
-                product.name.toLowerCase().includes(searchTerm) || 
-                product.price.toString().includes(searchTerm)
-            );
-            
-            filteredProducts.forEach(product => {
-                const li = document.createElement('li');
-                li.className = 'product-item';
-                li.innerHTML = `
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-price">Precio: $${product.price} | Stock: ${product.quantity}</div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn btn-success" onclick="addToDelivery(${product.id})">Agregar</button>
-                        <button class="btn btn-danger" onclick="addToLow(${product.id})">Baja</button>
-                    </div>
-                `;
-                resultsContainer.appendChild(li);
-            });
-        }
-
-        // Add product to delivery
-        function addToDelivery(productId) {
-            const product = users[currentUser].inventory.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Check if product already in delivery
-            const existingItem = deliveryItems.find(item => item.id === productId);
-            
-            if (existingItem) {
-                if (existingItem.quantity >= product.quantity) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                existingItem.quantity++;
-            } else {
-                if (product.quantity < 1) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                deliveryItems.push({
-                    id: product.id,
-                    name: product.name,
-                    price: parseFloat(product.price),
-                    quantity: 1
-                });
-            }
-            
-            updateDeliveryDisplay();
-            showNotification('Producto agregado a entrega');
-        }
-
-        // Add product to low items
-        function addToLow(productId) {
-            const product = users[currentUser].inventory.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Check if product already in low items
-            const existingItem = lowItems.find(item => item.id === productId);
-            
-            if (existingItem) {
-                if (existingItem.quantity >= product.quantity) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                existingItem.quantity++;
-            } else {
-                if (product.quantity < 1) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                lowItems.push({
-                    id: product.id,
-                    name: product.name,
-                    price: parseFloat(product.price),
-                    quantity: 1
-                });
-            }
-            
-            updateLowDisplay();
-            showNotification('Producto agregado a bajas');
-        }
-
-        // Update delivery display
-        function updateDeliveryDisplay() {
-            const deliveryItemsContainer = document.getElementById('delivery-items');
-            const deliveryTotalElement = document.getElementById('delivery-total');
-            const deliveryTotalDisplay = document.getElementById('deliveryTotal');
-            
-            deliveryItemsContainer.innerHTML = '';
-            let total = 0;
-            
-            deliveryItems.forEach(item => {
-                const subtotal = item.price * item.quantity;
-                total += subtotal;
-                
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.name}</td>
-                    <td>
-                        <button onclick="changeDeliveryQuantity(${item.id}, -1)">-</button>
-                        ${item.quantity}
-                        <button onclick="changeDeliveryQuantity(${item.id}, 1)">+</button>
-                    </td>
-                    <td>$${item.price.toFixed(2)}</td>
-                    <td>$${subtotal.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="removeFromDelivery(${item.id})">Eliminar</button>
-                    </td>
-                `;
-                deliveryItemsContainer.appendChild(tr);
-            });
-            
-            deliveryTotalElement.textContent = `$${total.toFixed(2)}`;
-            deliveryTotalDisplay.textContent = `Saldo de entrega: $${total.toFixed(2)}`;
-        }
-
-        // Update low items display
-        function updateLowDisplay() {
-            const lowItemsContainer = document.getElementById('low-items');
-            lowItemsContainer.innerHTML = '';
-            
-            lowItems.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.name}</td>
-                    <td>
-                        <button onclick="changeLowQuantity(${item.id}, -1)">-</button>
-                        ${item.quantity}
-                        <button onclick="changeLowQuantity(${item.id}, 1)">+</button>
-                    </td>
-                    <td>$${item.price.toFixed(2)}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="removeFromLow(${item.id})">Eliminar</button>
-                    </td>
-                `;
-                lowItemsContainer.appendChild(tr);
-            });
-        }
-
-        // Change delivery quantity
-        function changeDeliveryQuantity(productId, change) {
-            const item = deliveryItems.find(item => item.id === productId);
-            if (!item) return;
-            
-            const product = users[currentUser].inventory.find(p => p.id === productId);
-            
-            if (change > 0) {
-                if (item.quantity >= product.quantity) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                item.quantity++;
-            } else {
-                if (item.quantity <= 1) {
-                    removeFromDelivery(productId);
-                    return;
-                }
-                item.quantity--;
-            }
-            
-            updateDeliveryDisplay();
-        }
-
-        // Change low quantity
-        function changeLowQuantity(productId, change) {
-            const item = lowItems.find(item => item.id === productId);
-            if (!item) return;
-            
-            const product = users[currentUser].inventory.find(p => p.id === productId);
-            
-            if (change > 0) {
-                if (item.quantity >= product.quantity) {
-                    showNotification('No hay suficiente stock', true);
-                    return;
-                }
-                item.quantity++;
-            } else {
-                if (item.quantity <= 1) {
-                    removeFromLow(productId);
-                    return;
-                }
-                item.quantity--;
-            }
-            
-            updateLowDisplay();
-        }
-
-        // Remove from delivery
-        function removeFromDelivery(productId) {
-            deliveryItems = deliveryItems.filter(item => item.id !== productId);
-            updateDeliveryDisplay();
-            showNotification('Producto eliminado de entrega');
-        }
-
-        // Remove from low items
-        function removeFromLow(productId) {
-            lowItems = lowItems.filter(item => item.id !== productId);
-            updateLowDisplay();
-            showNotification('Producto eliminado de bajas');
-        }
-
-        // Load inventory
-        function loadInventory() {
-            const inventoryContainer = document.getElementById('inventory-items');
-            inventoryContainer.innerHTML = '';
-            
-            const userInventory = users[currentUser].inventory;
-            userInventory.sort((a, b) => a.name.localeCompare(b.name));
-            
-            userInventory.forEach(product => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>$${parseFloat(product.price).toFixed(2)}</td>
-                    <td>${product.quantity}</td>
-                    <td>
-                        <button class="btn btn-success" onclick="addToDelivery(${product.id})">Agregar</button>
-                        <button class="btn btn-danger" onclick="addToLow(${product.id})">Baja</button>
-                    </td>
-                `;
-                inventoryContainer.appendChild(tr);
-            });
-        }
-
-        // Load history
-        function loadHistory() {
-            const deliveryHistoryList = document.getElementById('delivery-history-list');
-            const lowHistoryList = document.getElementById('low-history-list');
-            
-            deliveryHistoryList.innerHTML = '';
-            lowHistoryList.innerHTML = '';
-            
-            // Filter history for current user
-            const userDeliveryHistory = deliveryHistory.filter(record => record.user === currentUser);
-            const userLowHistory = lowHistory.filter(record => record.user === currentUser);
-            
-            userDeliveryHistory.forEach(record => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div>
-                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
-                        <strong>Total:</strong> $${record.total.toFixed(2)}
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="downloadPDF('delivery', ${record.id})">Descargar PDF</button>
-                    </div>
-                `;
-                deliveryHistoryList.appendChild(historyItem);
-            });
-            
-            userLowHistory.forEach(record => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div>
-                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
-                        <strong>Productos:</strong> ${record.items.length}
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="downloadPDF('low', ${record.id})">Descargar PDF</button>
-                    </div>
-                `;
-                lowHistoryList.appendChild(historyItem);
-            });
-        }
-
-        // Generate delivery
-        function generateDelivery() {
-            if (deliveryItems.length === 0) {
-                showNotification('No hay productos en la entrega', true);
-                return;
-            }
-            
-            showConfirmationModal(
-                'Confirmar Entrega',
-                '¿Estás seguro de que deseas generar la entrega? Esta acción no se puede deshacer.',
-                () => {
-                    // Calculate total
-                    const total = deliveryItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    
-                    // Create delivery record
-                    const deliveryRecord = {
-                        id: Date.now(),
-                        date: new Date(),
-                        user: currentUser,
-                        items: [...deliveryItems],
-                        total: total
-                    };
-                    
-                    // Update inventory
-                    deliveryItems.forEach(deliveryItem => {
-                        const product = users[currentUser].inventory.find(p => p.id === deliveryItem.id);
-                        if (product) {
-                            product.quantity -= deliveryItem.quantity;
-                            
-                            // Check if product is out of stock and add notification
-                            if (product.quantity === 0) {
-                                addNotification(`Producto agotado: ${product.name} para ${users[currentUser].name}`);
-                            }
-                        }
-                    });
-                    
-                    // Add to history
-                    deliveryHistory.push(deliveryRecord);
-                    
-                    // Generate PDF
-                    generateDeliveryPDF(deliveryRecord);
-                    
-                    // Reset delivery items
-                    deliveryItems = [];
-                    updateDeliveryDisplay();
-                    
-                    // Save data
-                    saveToLocalStorage();
-                    
-                    showNotification('Entrega generada exitosamente');
-                }
-            );
-        }
-
-        // Generate low items
-        function generateLow() {
-            if (lowItems.length === 0) {
-                showNotification('No hay productos para dar de baja', true);
-                return;
-            }
-            
-            showConfirmationModal(
-                'Confirmar Bajas',
-                '¿Estás seguro de que deseas realizar las bajas? Esta acción no se puede deshacer.',
-                () => {
-                    // Create low record
-                    const lowRecord = {
-                        id: Date.now(),
-                        date: new Date(),
-                        user: currentUser,
-                        items: [...lowItems],
-                        total: lowItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-                    };
-                    
-                    // Update inventory
-                    lowItems.forEach(lowItem => {
-                        const product = users[currentUser].inventory.find(p => p.id === lowItem.id);
-                        if (product) {
-                            product.quantity -= lowItem.quantity;
-                            
-                            // Check if product is out of stock and add notification
-                            if (product.quantity === 0) {
-                                addNotification(`Producto agotado: ${product.name} para ${users[currentUser].name}`);
-                            }
-                        }
-                    });
-                    
-                    // Add to history
-                    lowHistory.push(lowRecord);
-                    
-                    // Generate PDF
-                    generateLowPDF(lowRecord);
-                    
-                    // Reset low items
-                    lowItems = [];
-                    updateLowDisplay();
-                    
-                    // Save data
-                    saveToLocalStorage();
-                    
-                    showNotification('Bajas realizadas exitosamente');
-                }
-            );
-        }
-
-        // Generate delivery PDF
-        function generateDeliveryPDF(deliveryRecord) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Title
-            doc.setFontSize(20);
-            doc.text('Comprobante de Entrega', 105, 15, { align: 'center' });
-            
-            // Details
-            doc.setFontSize(12);
-            doc.text(`Fecha: ${new Date(deliveryRecord.date).toLocaleString()}`, 14, 25);
-            doc.text(`Vendedor: ${users[deliveryRecord.user].name}`, 14, 32);
-            
-            // Table
-            const tableData = deliveryRecord.items.map(item => [
-                item.name,
-                item.quantity,
-                `$${item.price.toFixed(2)}`,
-                `$${(item.price * item.quantity).toFixed(2)}`
-            ]);
-            
-            tableData.push([
-                'TOTAL',
-                '',
-                '',
-                `$${deliveryRecord.total.toFixed(2)}`
-            ]);
-            
-            doc.autoTable({
-                startY: 40,
-                head: [['Producto', 'Cantidad', 'Precio', 'Subtotal']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: [44, 62, 80] }
-            });
-            
-            // Save PDF
-            const pdfBlob = doc.output('blob');
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            
-            // Store PDF URL in history record
-            deliveryRecord.pdfUrl = pdfUrl;
-            
-            // For immediate download
-            doc.save(`entrega_${deliveryRecord.id}.pdf`);
-        }
-
-        // Generate low PDF
-        function generateLowPDF(lowRecord) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Title
-            doc.setFontSize(20);
-            doc.text('Comprobante de Baja', 105, 15, { align: 'center' });
-            
-            // Details
-            doc.setFontSize(12);
-            doc.text(`Fecha: ${new Date(lowRecord.date).toLocaleString()}`, 14, 25);
-            doc.text(`Vendedor: ${users[lowRecord.user].name}`, 14, 32);
-            
-            // Table
-            const tableData = lowRecord.items.map(item => [
-                item.name,
-                item.quantity,
-                `$${item.price.toFixed(2)}`,
-                `$${(item.price * item.quantity).toFixed(2)}`
-            ]);
-            
-            doc.autoTable({
-                startY: 40,
-                head: [['Producto', 'Cantidad', 'Precio', 'Subtotal']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: [44, 62, 80] }
-            });
-            
-            // Save PDF
-            const pdfBlob = doc.output('blob');
-            const pdfUrl = URL.createObjectURL(pdfBlob);
-            
-            // Store PDF URL in history record
-            lowRecord.pdfUrl = pdfUrl;
-            
-            // For immediate download
-            doc.save(`baja_${lowRecord.id}.pdf`);
-        }
-
-        // Download PDF
-        function downloadPDF(type, recordId) {
-            let record;
-            
-            if (type === 'delivery') {
-                record = deliveryHistory.find(r => r.id === recordId);
-            } else {
-                record = lowHistory.find(r => r.id === recordId);
-            }
-            
-            if (record && record.pdfUrl) {
-                const a = document.createElement('a');
-                a.href = record.pdfUrl;
-                a.download = `${type}_${recordId}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } else {
-                showNotification('PDF no disponible', true);
-            }
-        }
-
-        // Load admin deliveries
-        function loadAdminDeliveries() {
-            const adminDeliveriesList = document.getElementById('admin-deliveries-list');
-            adminDeliveriesList.innerHTML = '';
-            
-            deliveryHistory.forEach(record => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div>
-                        <strong>Vendedor:</strong> ${users[record.user].name} <br>
-                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
-                        <strong>Total:</strong> $${record.total.toFixed(2)}
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="downloadPDF('delivery', ${record.id})">Descargar PDF</button>
-                    </div>
-                `;
-                adminDeliveriesList.appendChild(historyItem);
-            });
-        }
-
-        // Load admin lows
-        function loadAdminLows() {
-            const adminLowsList = document.getElementById('admin-lows-list');
-            adminLowsList.innerHTML = '';
-            
-            lowHistory.forEach(record => {
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <div>
-                        <strong>Vendedor:</strong> ${users[record.user].name} <br>
-                        <strong>Fecha:</strong> ${new Date(record.date).toLocaleString()} <br>
-                        <strong>Productos:</strong> ${record.items.length}
-                    </div>
-                    <div>
-                        <button class="btn btn-primary" onclick="downloadPDF('low', ${record.id})">Descargar PDF</button>
-                        <button class="btn btn-success" onclick="approveLow(${record.id})">Aprobar</button>
-                    </div>
-                `;
-                adminLowsList.appendChild(historyItem);
-            });
-        }
-
-        // Approve low
-        function approveLow(recordId) {
-            const record = lowHistory.find(r => r.id === recordId);
-            if (!record) return;
-            
-            // Mark as approved
-            record.approved = true;
-            
-            // Save data
-            saveToLocalStorage();
-            
-            showNotification('Baja aprobada exitosamente');
-        }
-
-        // Load user inventory for admin
-        function loadUserInventory() {
-            const userSelect = document.getElementById('user-select');
-            const selectedUser = userSelect.value;
-            const inventoryContainer = document.getElementById('admin-inventory-items');
-            inventoryContainer.innerHTML = '';
-            
-            const userInventory = users[selectedUser].inventory;
-            userInventory.sort((a, b) => a.name.localeCompare(b.name));
-            
-            userInventory.forEach(product => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${product.name}</td>
-                    <td>$${parseFloat(product.price).toFixed(2)}</td>
-                    <td>${product.quantity}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deleteProduct('${selectedUser}', ${product.id})">Eliminar</button>
-                    </td>
-                `;
-                inventoryContainer.appendChild(tr);
-            });
-        }
-
-        // Add new product
-        function addNewProduct() {
-            const userSelect = document.getElementById('user-select');
-            const selectedUser = userSelect.value;
-            const nameInput = document.getElementById('new-product-name');
-            const priceInput = document.getElementById('new-product-price');
-            const quantityInput = document.getElementById('new-product-quantity');
-            
-            const name = nameInput.value.trim();
-            const price = parseFloat(priceInput.value);
-            const quantity = parseInt(quantityInput.value);
-            
-            if (!name || isNaN(price) || isNaN(quantity) || price <= 0 || quantity < 0) {
-                showNotification('Por favor ingresa valores válidos', true);
-                return;
-            }
-            
-            // Generate unique ID
-            const newId = Math.max(0, ...users[selectedUser].inventory.map(p => p.id)) + 1;
-            
-            // Add product
-            users[selectedUser].inventory.push({
-                id: newId,
-                name: name,
-                price: price,
-                quantity: quantity
-            });
-            
-            // Clear inputs
-            nameInput.value = '';
-            priceInput.value = '';
-            quantityInput.value = '';
-            
-            // Reload inventory
-            loadUserInventory();
-            
-            // Save data
-            saveToLocalStorage();
-            
-            showNotification('Producto agregado exitosamente');
-        }
-
-        // Delete product
-        function deleteProduct(user, productId) {
-            showConfirmationModal(
-                'Eliminar Producto',
-                '¿Estás seguro de que deseas eliminar este producto?',
-                () => {
-                    users[user].inventory = users[user].inventory.filter(p => p.id !== productId);
-                    loadUserInventory();
-                    saveToLocalStorage();
-                    showNotification('Producto eliminado exitosamente');
-                }
-            );
-        }
-
-        // Load notifications
-        function loadNotifications() {
-            const notificationsList = document.getElementById('notifications-list');
-            notificationsList.innerHTML = '';
-            
-            if (notifications.length === 0) {
-                notificationsList.innerHTML = '<p>No hay notificaciones</p>';
-                return;
-            }
-            
-            notifications.forEach(notification => {
-                const notificationItem = document.createElement('div');
-                notificationItem.className = 'history-item';
-                notificationItem.innerHTML = `
-                    <div>
-                        <strong>${new Date(notification.date).toLocaleString()}</strong> <br>
-                        ${notification.message}
-                    </div>
-                `;
-                notificationsList.appendChild(notificationItem);
-            });
-        }
-
-        // Add notification
-        function addNotification(message) {
-            notifications.push({
-                id: Date.now(),
-                date: new Date(),
-                message: message
-            });
-            
-            saveToLocalStorage();
-        }
-
-        // Show notification
-        function showNotification(message, isError = false) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = isError ? 'notification error' : 'notification';
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Show confirmation modal
-        function showConfirmationModal(title, message, confirmCallback) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            document.getElementById('confirmationModal').style.display = 'flex';
-            
-            window.confirmAction = confirmCallback;
-        }
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('confirmationModal').style.display = 'none';
-        }
-
-        // Confirm action
-        function confirmAction() {
-            if (typeof window.confirmAction === 'function') {
-                window.confirmAction();
-            }
-            closeModal();
-        }
-
-        // Initialize the application
-        window.onload = function() {
-            initializeData();
-            
-            // Check if user is already logged in (for demo purposes)
-            // In a real application, you would check from session storage or cookies
-        };
+        // Eventos del panel de administrador
+        document.getElementById('btn-editar-inventario').addEventListener('click', () => renderEditarInventario());
+        document.getElementById('btn-cargar-entrega').addEventListener('click', () => renderCargarRegistro('entrega'));
+        document.getElementById('btn-cargar-baja').addEventListener('click', () => renderCargarRegistro('baja'));
     </script>
 </body>
 </html>
