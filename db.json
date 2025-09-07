@@ -3,7 +3,7 @@
     {
       "nombre": "Teclado Mecánico",
       "precio": 75.5,
-      "cantidad": 46
+      "cantidad": 42
     },
     {
       "nombre": "Mouse Gamer",
@@ -24,6 +24,16 @@
       "nombre": "Disco Duro SSD 1TB",
       "precio": 110,
       "cantidad": 70
+    },
+    {
+      "nombre": "perros",
+      "cantidad": 2,
+      "precio": 56
+    },
+    {
+      "nombre": "hato",
+      "cantidad": 211,
+      "precio": 312
     }
   ],
   "registros_entrega": [],
