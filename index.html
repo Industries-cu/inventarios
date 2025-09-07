@@ -3,66 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <title>Gestión de Inventario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: Arial; margin: 20px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+    h2, h3, h4 {
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
     .hidden { display: none; }
-    .btn { padding: 5px 10px; margin: 5px; cursor: pointer; }
-    .baja { background-color: red; color: white; }
-    .entrega { background-color: green; color: white; }
-    .panel { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
-    input[type="text"] { width: 300px; padding: 5px; }
+    .btn {
+      padding: 8px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-primary { background: #007bff; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-success { background: #28a745; color: white; }
+    .panel {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    input[type="text"], input[type="password"], select {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    ul { list-style: none; padding: 0; }
+    li { margin: 5px 0; }
+    .product {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #eef;
+      padding: 8px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
 
-<h2>Inicio de sesión</h2>
-<select id="usuarioSelect">
-  <option value="">Selecciona usuario</option>
-  <option value="usuario1">usuario1</option>
-  <option value="usuario2">usuario2</option>
-  <option value="usuario3">usuario3</option>
-  <option value="usuario4">usuario4</option>
-  <option value="usuario5">usuario5</option>
-  <option value="admin">admin</option>
-</select>
-<input type="password" id="adminPass" placeholder="Contraseña (solo admin)" />
-<button onclick="login()">Entrar</button>
+<div class="container">
+  <h2>Inicio de sesión</h2>
+  <select id="usuarioSelect">
+    <option value="">Selecciona usuario</option>
+    <option value="usuario1">usuario1</option>
+    <option value="usuario2">usuario2</option>
+    <option value="usuario3">usuario3</option>
+    <option value="usuario4">usuario4</option>
+    <option value="usuario5">usuario5</option>
+    <option value="admin">admin</option>
+  </select>
+  <input type="password" id="adminPass" placeholder="Contraseña (solo admin)" />
+  <button class="btn btn-primary" onclick="login()">Entrar</button>
 
-<div id="app" class="hidden">
-  <h3 id="nombreUsuario"></h3>
-  <button class="btn" onclick="mostrarEntrega()">Entrega</button>
-  <span>Total: $<span id="totalEntrega">0</span></span>
-  <button class="btn" onclick="mostrarBajas()">Baja defecto</button>
-  <button class="btn" onclick="mostrarInventario()">Inventario general</button>
-  <br><br>
-  <input type="text" id="busqueda" placeholder="Buscar por nombre o precio" oninput="buscarProducto()" />
-  <div id="resultados"></div>
-</div>
+  <div id="app" class="hidden">
+    <h3 id="nombreUsuario"></h3>
+    <button class="btn btn-success" onclick="mostrarEntrega()">Entrega</button>
+    <span>Total: $<span id="totalEntrega">0</span></span>
+    <button class="btn btn-danger" onclick="mostrarBajas()">Baja defecto</button>
+    <button class="btn btn-primary" onclick="mostrarInventario()">Inventario general</button>
+    <br><br>
+    <input type="text" id="busqueda" placeholder="Buscar por nombre o precio" oninput="buscarProducto()" />
+    <div id="resultados"></div>
+  </div>
 
-<div id="panelEntrega" class="panel hidden">
-  <h4>Productos en entrega</h4>
-  <ul id="listaEntrega"></ul>
-  <button onclick="generarEntrega()">Generar entrega</button>
-</div>
+  <div id="panelEntrega" class="panel hidden">
+    <h4>Productos en entrega</h4>
+    <ul id="listaEntrega"></ul>
+    <button class="btn btn-success" onclick="generarEntrega()">Generar entrega</button>
+  </div>
 
-<div id="panelBajas" class="panel hidden">
-  <h4>Productos en baja</h4>
-  <ul id="listaBajas"></ul>
-</div>
+  <div id="panelBajas" class="panel hidden">
+    <h4>Productos en baja</h4>
+    <ul id="listaBajas"></ul>
+  </div>
 
-<div id="panelInventario" class="panel hidden">
-  <h4>Inventario general</h4>
-  <ul id="listaInventario"></ul>
-</div>
+  <div id="panelInventario" class="panel hidden">
+    <h4>Inventario general</h4>
+    <ul id="listaInventario"></ul>
+  </div>
 
-<div id="panelAdmin" class="panel hidden">
-  <h3>Panel de administrador</h3>
-  <h4>Historial de entregas</h4>
-  <ul><li>Entrega usuario1 - PDF [descargar]</li></ul>
-  <h4>Historial de bajas</h4>
-  <ul><li>Producto X - <button>Aprobar</button></li></ul>
-  <h4>Editar inventario</h4>
-  <select><option>usuario1</option><option>usuario2</option></select>
+  <div id="panelAdmin" class="panel hidden">
+    <h3>Panel de administrador</h3>
+    <h4>Historial de entregas</h4>
+    <ul><li>Entrega usuario1 - PDF [descargar]</li></ul>
+    <h4>Historial de bajas</h4>
+    <ul><li>Producto X - <button class="btn btn-success">Aprobar</button></li></ul>
+    <h4>Editar inventario</h4>
+    <select><option>usuario1</option><option>usuario2</option></select>
+  </div>
 </div>
 
 <script>
@@ -99,9 +148,12 @@
     productos.forEach((p, i) => {
       if (p.nombre.toLowerCase().includes(query) || p.precio.toString().includes(query)) {
         const div = document.createElement("div");
+        div.className = "product";
         div.innerHTML = `${p.nombre} - $${p.precio} (${p.cantidad}) 
-          <button class="entrega" onclick="agregarEntrega(${i})">Agregar</button>
-          <button class="baja" onclick="agregarBaja(${i})">Baja</button>`;
+          <span>
+            <button class="btn btn-success" onclick="agregarEntrega(${i})">Agregar</button>
+            <button class="btn btn-danger" onclick="agregarBaja(${i})">Baja</button>
+          </span>`;
         contenedor.appendChild(div);
       }
     });
@@ -151,31 +203,4 @@
   }
 
   function mostrarInventario() {
-    const lista = document.getElementById("listaInventario");
-    lista.innerHTML = "";
-    const productos = inventarios[usuarioActual] || [];
-    productos.sort((a, b) => a.nombre.localeCompare(b.nombre)).forEach((p, i) => {
-      const li = document.createElement("li");
-      li.innerHTML = `${p.nombre} - $${p.precio} (${p.cantidad}) 
-        <button class="entrega" onclick="agregarEntrega(${i})">Agregar</button>
-        <button class="baja" onclick="agregarBaja(${i})">Baja</button>`;
-      lista.appendChild(li);
-    });
-    document.getElementById("panelInventario").classList.toggle("hidden");
-  }
-
-  function generarEntrega() {
-    if (confirm("¿Confirmar entrega?")) {
-      entrega.forEach(p => {
-        const item = inventarios[usuarioActual].find(x => x.nombre === p.nombre);
-        if (item) item.cantidad -= 1;
-      });
-      entrega = [];
-      actualizarEntrega();
-      alert("Entrega generada. PDF simulado guardado.");
-    }
-  }
-</script>
-
-</body>
-</html>
+    const lista =
