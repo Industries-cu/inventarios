@@ -350,22 +350,31 @@
     <script>
         // Script de JavaScript
         let db; // La variable `db` se inicializará después de cargar el JSON
+        let currentInventario = [];
+        let registroEntrega = [];
+        let registroBaja = [];
 
         const users = {
             'Isaac': 'Pepe1',
-            'Admin': 'Ludmila76'
+            'Admin': 'Ludmila76',
+            'Lien': 'Lien' // Nuevo usuario agregado
         };
 
         const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
 
         // Función para cargar el archivo JSON y evitar el caché
-        async function loadInventory() {
+        async function loadInventory(username) {
+            let dbFileName = 'db.json'; // Archivo por defecto para Isaac y Admin
+            if (username === 'Lien') {
+                dbFileName = 'dblien.json'; // Archivo específico para Lien
+            }
+            
             try {
                 // Agrega una marca de tiempo a la URL para evitar el caché del navegador
                 const cacheBuster = new Date().getTime();
-                const response = await fetch(`db.json?v=${cacheBuster}`);
+                const response = await fetch(`${dbFileName}?v=${cacheBuster}`);
                 if (!response.ok) {
-                    throw new Error('No se pudo cargar el archivo db.json');
+                    throw new Error(`No se pudo cargar el archivo ${dbFileName}`);
                 }
                 const data = await response.json();
                 db = data;
@@ -375,7 +384,7 @@
                 registroBaja = JSON.parse(localStorage.getItem('registroBaja')) || [];
             } catch (error) {
                 console.error(error);
-                alert('No se pudo cargar el inventario. Asegúrate de que el archivo db.json esté en la misma carpeta.');
+                alert(`No se pudo cargar el inventario. Asegúrate de que el archivo ${dbFileName} esté en la misma carpeta.`);
                 db = { "inventario": [], "registros_entrega": [], "registros_baja": [] }; // Carga un inventario vacío si hay un error
             }
         }
@@ -388,7 +397,7 @@
                 const currentTime = new Date().getTime();
                 if (currentTime - session.timestamp < SESSION_DURATION) {
                     // La sesión es válida, restaurar el panel
-                    loadInventory().then(() => {
+                    loadInventory(session.username).then(() => {
                         showPanel(session.username);
                     });
                 } else {
@@ -402,7 +411,7 @@
         // Función para mostrar el panel correcto
         function showPanel(username) {
             document.getElementById('auth-container').classList.add('hidden');
-            if (username === 'Isaac') {
+            if (username === 'Isaac' || username === 'Lien') { // Se incluye a Lien en el panel de vendedor
                 document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
                 document.getElementById('vendedor-panel').classList.remove('hidden');
                 renderInventario();
@@ -665,12 +674,15 @@
         }
 
         // Lógica de Autenticación y Navegación
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (users[username] === password) {
+                // Se carga el inventario ANTES de mostrar el panel
+                await loadInventory(username);
+
                 const sessionData = {
                     username: username,
                     timestamp: new Date().getTime()
