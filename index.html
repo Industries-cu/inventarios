@@ -302,10 +302,22 @@
         <div class="auth-container" id="auth-container">
             <h1>Bienvenido a Inventario Web</h1>
             <form class="auth-form" id="login-form">
-                <input type="text" id="username" placeholder="Usuario" required>
+                <input type="text" id="username" placeholder="Usuario" list="users-list" required>
                 <input type="password" id="password" placeholder="Contraseña" required>
                 <button type="submit">Iniciar Sesión</button>
             </form>
+            <datalist id="users-list">
+                <option value="Isaac">
+                <option value="Lien">
+                <option value="Alain">
+                <option value="Adiane">
+                <option value="Yuniaky">
+                <option value="Riselda">
+                <option value="Taller">
+                <option value="Nailin">
+                <option value="Marcia">
+                <option value="Admin">
+            </datalist>
         </div>
 
         <div class="panel-container hidden" id="vendedor-panel">
@@ -353,39 +365,55 @@
         let currentInventario = [];
         let registroEntrega = [];
         let registroBaja = [];
+        let currentUser; // Variable para almacenar el usuario actual
+        let currentDbFile;
 
         const users = {
-            'Isaac': 'Pepe1',
-            'Admin': 'Ludmila76',
-            'Lien': 'Lien' // Nuevo usuario agregado
+            'Isaac': 'Isaac',
+            'Lien': 'Lien',
+            'Alain': 'Alain',
+            'Adiane': 'Adiane',
+            'Yuniaky': 'Yuniaky',
+            'Riselda': 'Riselda',
+            'Taller': 'Taller',
+            'Nailin': 'Nailin',
+            'Marcia': 'Marcia',
+            'Admin': 'Ludmila76'
+        };
+
+        const userFiles = {
+            'Isaac': 'db.json',
+            'Lien': 'dblien.json',
+            'Alain': 'dbAlain.json',
+            'Adiane': 'dbAdiane.json',
+            'Yuniaky': 'dbyuniaky.json',
+            'Riselda': 'dbRiselda.json',
+            'Taller': 'dbtaller.json',
+            'Nailin': 'dbNailin.json',
+            'Marcia': 'dbMarcia.json',
         };
 
         const SESSION_DURATION = 5 * 60 * 60 * 1000; // 5 horas en milisegundos
 
         // Función para cargar el archivo JSON y evitar el caché
-        async function loadInventory(username) {
-            let dbFileName = 'db.json'; // Archivo por defecto para Isaac y Admin
-            if (username === 'Lien') {
-                dbFileName = 'dblien.json'; // Archivo específico para Lien
-            }
-            
+        async function loadInventory(fileName) {
             try {
                 // Agrega una marca de tiempo a la URL para evitar el caché del navegador
                 const cacheBuster = new Date().getTime();
-                const response = await fetch(`${dbFileName}?v=${cacheBuster}`);
+                const response = await fetch(`${fileName}?v=${cacheBuster}`);
                 if (!response.ok) {
-                    throw new Error(`No se pudo cargar el archivo ${dbFileName}`);
+                    throw new Error(`No se pudo cargar el archivo ${fileName}`);
                 }
                 const data = await response.json();
                 db = data;
-                // Inicializa los registros después de cargar el inventario
                 currentInventario = [...db.inventario];
+                currentDbFile = fileName; // Guardar el nombre del archivo para la sesión
                 registroEntrega = JSON.parse(localStorage.getItem('registroEntrega')) || [];
                 registroBaja = JSON.parse(localStorage.getItem('registroBaja')) || [];
             } catch (error) {
                 console.error(error);
-                alert(`No se pudo cargar el inventario. Asegúrate de que el archivo ${dbFileName} esté en la misma carpeta.`);
-                db = { "inventario": [], "registros_entrega": [], "registros_baja": [] }; // Carga un inventario vacío si hay un error
+                alert(`No se pudo cargar el inventario. Asegúrate de que el archivo ${fileName} esté en la misma carpeta.`);
+                db = { "inventario": [], "registros_entrega": [], "registros_baja": [] };
             }
         }
 
@@ -396,12 +424,12 @@
                 const session = JSON.parse(storedSession);
                 const currentTime = new Date().getTime();
                 if (currentTime - session.timestamp < SESSION_DURATION) {
-                    // La sesión es válida, restaurar el panel
-                    loadInventory(session.username).then(() => {
-                        showPanel(session.username);
+                    currentUser = session.username;
+                    const fileName = userFiles[currentUser];
+                    loadInventory(fileName).then(() => {
+                        showPanel(currentUser);
                     });
                 } else {
-                    // La sesión ha expirado
                     alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
                     logout();
                 }
@@ -411,14 +439,14 @@
         // Función para mostrar el panel correcto
         function showPanel(username) {
             document.getElementById('auth-container').classList.add('hidden');
-            if (username === 'Isaac' || username === 'Lien') { // Se incluye a Lien en el panel de vendedor
-                document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
-                document.getElementById('vendedor-panel').classList.remove('hidden');
-                renderInventario();
-            } else if (username === 'Admin') {
+            if (username === 'Admin') {
                 document.getElementById('admin-welcome-message').textContent = `Hola, ${username}!`;
                 document.getElementById('admin-panel').classList.remove('hidden');
                 renderAdminPanel();
+            } else {
+                document.getElementById('welcome-message').textContent = `Hola, ${username}!`;
+                document.getElementById('vendedor-panel').classList.remove('hidden');
+                renderInventario();
             }
         }
         
@@ -431,7 +459,7 @@
             `;
             const searchBar = document.getElementById('search-bar');
             searchBar.addEventListener('input', (e) => searchInventario(e.target.value));
-            searchInventario(''); // Muestra todo al inicio
+            searchInventario('');
         }
 
         function searchInventario(query) {
@@ -486,7 +514,6 @@
             alert(`Producto "${nombre}" agregado al registro de ${tipo}.`);
         }
         
-        // Nueva función para quitar un item del registro
         function removeItemFromRegistro(nombre, tipo) {
             if (tipo === 'entrega') {
                 registroEntrega = registroEntrega.filter(item => item.nombre !== nombre);
@@ -544,8 +571,10 @@
             doc.text(`Registro de ${tipo === 'entrega' ? 'Entrega' : 'Baja'}`, 10, 10);
             doc.setFontSize(12);
             doc.text(`Fecha: ${fecha}`, 10, 20);
+            doc.text(`Vendedor: ${currentUser}`, 10, 26);
 
-            let y = 30;
+
+            let y = 36;
             let total = 0;
             registro.forEach(item => {
                 const subtotal = item.precio * item.cantidad;
@@ -557,9 +586,8 @@
             y += 10;
             doc.text(`Total: $${total.toFixed(2)}`, 10, y);
 
-            doc.save(`Registro_${tipo}_${fecha}.pdf`);
+            doc.save(`Registro_${tipo}_${currentUser}_${fecha}.pdf`);
             
-            // Reinicia el registro
             if (tipo === 'entrega') {
                 registroEntrega = [];
                 localStorage.setItem('registroEntrega', JSON.stringify(registroEntrega));
@@ -628,7 +656,6 @@
                 contentPre.textContent = items;
                 previewDiv.classList.remove('hidden');
 
-                // Extraer los datos para procesar
                 const lines = items.split('\n').map(line => line.trim()).filter(line => line.startsWith('- '));
                 let parsedItems = [];
                 lines.forEach(line => {
@@ -654,7 +681,6 @@
 
             const confirmacion = confirm(`¿Estás seguro de que quieres ${tipo === 'entrega' ? 'reducir' : 'dar de baja'} estos productos del inventario?`);
             if (confirmacion) {
-                // Lógica de actualización del inventario (modo local)
                 data.forEach(item => {
                     const inventarioItem = db.inventario.find(inv => inv.nombre === item.nombre);
                     if (inventarioItem) {
@@ -666,7 +692,6 @@
                 });
                 alert('Inventario actualizado. Ahora debes subir el archivo JSON actualizado a tu repositorio de GitHub.');
                 
-                // Opcionalmente, aquí puedes mostrar el JSON para que el admin lo copie y pegue
                 console.log(JSON.stringify(db, null, 2));
             }
             localStorage.removeItem('tempPdfData');
@@ -674,21 +699,29 @@
         }
 
         // Lógica de Autenticación y Navegación
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
+        document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (users[username] === password) {
-                // Se carga el inventario ANTES de mostrar el panel
-                await loadInventory(username);
-
-                const sessionData = {
-                    username: username,
-                    timestamp: new Date().getTime()
-                };
-                localStorage.setItem('session', JSON.stringify(sessionData));
-                showPanel(username);
+                const fileName = userFiles[username];
+                if (fileName) {
+                    loadInventory(fileName).then(() => {
+                        const sessionData = {
+                            username: username,
+                            timestamp: new Date().getTime()
+                        };
+                        localStorage.setItem('session', JSON.stringify(sessionData));
+                        currentUser = username;
+                        showPanel(username);
+                    });
+                } else if (username === 'Admin') {
+                    // Cargar una base de datos genérica para el admin si no está mapeada, o simplemente mostrar el panel
+                    showPanel(username);
+                } else {
+                    alert('Usuario no tiene un archivo de inventario asignado.');
+                }
             } else {
                 alert('Usuario o contraseña incorrectos.');
             }
