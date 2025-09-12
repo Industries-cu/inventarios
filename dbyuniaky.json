@@ -1,0 +1,407 @@
+
+{
+  "inventario": [
+    {
+      "nombre": "pares de aretes",
+      "cantidad": 9,
+      "precio": 120
+    },
+    {
+      "nombre": "felpas normales",
+      "cantidad": 7,
+      "precio": 20
+    },
+    {
+      "nombre": "felpas carol yi",
+      "cantidad": 12,
+      "precio": 30
+    },
+    {
+      "nombre": "felpas de oreja",
+      "cantidad": 9,
+      "precio": 50
+    },
+    {
+      "nombre": "pares de peyisquitos",
+      "cantidad": 5,
+      "precio": 50
+    },
+    {
+      "nombre": "pares de lacitos",
+      "cantidad": 4,
+      "precio": 120
+    },
+    {
+      "nombre": "cintillos de niña",
+      "cantidad": 2,
+      "precio": 120
+    },
+    {
+      "nombre": "areties chiquitos",
+      "cantidad": 18,
+      "precio": 50
+    },
+    {
+      "nombre": "aretes medianos",
+      "cantidad": 30,
+      "precio": 70
+    },
+    {
+      "nombre": "aretes grandes",
+      "cantidad": 30,
+      "precio": 100
+    },
+    {
+      "nombre": "cintos finos",
+      "cantidad": 1,
+      "precio": 700
+    },
+    {
+      "nombre": "pares de lacitos de liguitas",
+      "cantidad": 2,
+      "precio": 100
+    },
+    {
+      "nombre": "felpas",
+      "cantidad": 1,
+      "precio": 50
+    },
+    {
+      "nombre": "creyones rosados",
+      "cantidad": 2,
+      "precio": 300
+    },
+    {
+      "nombre": "gafas",
+      "cantidad": 1,
+      "precio": 750
+    },
+    {
+      "nombre": "ganchos para el pelo",
+      "cantidad": 1,
+      "precio": 250
+    },
+    {
+      "nombre": "cintillos de orejotas",
+      "cantidad": 2,
+      "precio": 150
+    },
+    {
+      "nombre": "scruncgi",
+      "cantidad": 2,
+      "precio": 70
+    },
+    {
+      "nombre": "protectores de voltaje",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "blume",
+      "cantidad": 5,
+      "precio": 400
+    },
+    {
+      "nombre": "pares de medias",
+      "cantidad": 1,
+      "precio": 170
+    },
+    {
+      "nombre": "juegos de reloj",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "licras levanta gluteos largas",
+      "cantidad": 3,
+      "precio": 2600
+    },
+    {
+      "nombre": "ajustadores",
+      "cantidad": 1,
+      "precio": 1150
+    },
+    {
+      "nombre": "perfumitos finos",
+      "cantidad": 8,
+      "precio": 850
+    },
+    {
+      "nombre": "chort",
+      "cantidad": 1,
+      "precio": 2200
+    },
+    {
+      "nombre": "ajustadores",
+      "cantidad": 5,
+      "precio": 1350
+    },
+    {
+      "nombre": "linternad de cabeza",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "vestido",
+      "cantidad": 1,
+      "precio": 3700
+    },
+    {
+      "nombre": "blusitas",
+      "cantidad": 5,
+      "precio": 1800
+    },
+    {
+      "nombre": "licras levanta gluteos sencillas",
+      "cantidad": 6,
+      "precio": 1800
+    },
+    {
+      "nombre": "gorras",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "pares de medias feas de muñecos",
+      "cantidad": 2,
+      "precio": 600
+    },
+    {
+      "nombre": "monedero",
+      "cantidad": 2,
+      "precio": 1800
+    },
+    {
+      "nombre": "ganchitos",
+      "cantidad": 13,
+      "precio": 125
+    },
+    {
+      "nombre": "creyones",
+      "cantidad": 10,
+      "precio": 380
+    },
+    {
+      "nombre": "delineadores",
+      "cantidad": 18,
+      "precio": 320
+    },
+    {
+      "nombre": "brillos de labios",
+      "cantidad": 17,
+      "precio": 250
+    },
+    {
+      "nombre": "termometro",
+      "cantidad": 1,
+      "precio": 1100
+    },
+    {
+      "nombre": "sombras de ojo",
+      "cantidad": 2,
+      "precio": 1600
+    },
+    {
+      "nombre": "enalaprail",
+      "cantidad": 9,
+      "precio": 800
+    },
+    {
+      "nombre": "billeteras",
+      "cantidad": 5,
+      "precio": 1300
+    },
+    {
+      "nombre": "medias",
+      "cantidad": 9,
+      "precio": 320
+    },
+    {
+      "nombre": "colonias",
+      "cantidad": 3,
+      "precio": 2300
+    },
+    {
+      "nombre": "cuchillos",
+      "cantidad": 1,
+      "precio": 500
+    },
+    {
+      "nombre": "dipirona",
+      "cantidad": 4,
+      "precio": 280
+    },
+    {
+      "nombre": "pasamonytañas",
+      "cantidad": 4,
+      "precio": 700
+    },
+    {
+      "nombre": "carteras de oso",
+      "cantidad": 2,
+      "precio": 2700
+    },
+    {
+      "nombre": "pomo",
+      "cantidad": 1,
+      "precio": 1200
+    },
+    {
+      "nombre": "mochila",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "bolsitos de hombre",
+      "cantidad": 3,
+      "precio": 1800
+    },
+    {
+      "nombre": "juegos de maquinita d afeitar",
+      "cantidad": 6,
+      "precio": 750
+    },
+    {
+      "nombre": "silicona para el pelo",
+      "cantidad": 1,
+      "precio": 1600
+    },
+    {
+      "nombre": "juegos de saya",
+      "cantidad": 3,
+      "precio": 3800
+    },
+    {
+      "nombre": "juegos de pantaloneta 4 puertas",
+      "cantidad": 4,
+      "precio": 5500
+    },
+    {
+      "nombre": "juego de hombre",
+      "cantidad": 1,
+      "precio": 5200
+    },
+    {
+      "nombre": "mono con Faja",
+      "cantidad": 8,
+      "precio": 4200
+    },
+    {
+      "nombre": "llaveros",
+      "cantidad": 5,
+      "precio": 700
+    },
+    {
+      "nombre": "desodorante",
+      "cantidad": 2,
+      "precio": 1200
+    },
+    {
+      "nombre": "licras largas",
+      "cantidad": 12,
+      "precio": 3500
+    },
+    {
+      "nombre": "licras cortas",
+      "cantidad": 7,
+      "precio": 2200
+    },
+    {
+      "nombre": "abanico",
+      "cantidad": 6,
+      "precio": 500
+    },
+    {
+      "nombre": "termo starbuk",
+      "cantidad": 1,
+      "precio": 4500
+    },
+    {
+      "nombre": "cintos de hombre",
+      "cantidad": 4,
+      "precio": 2000
+    },
+    {
+      "nombre": "juego de popmos con jarra",
+      "cantidad": 1,
+      "precio": 4500
+    },
+    {
+      "nombre": "pastas",
+      "cantidad": 4,
+      "precio": 1200
+    },
+    {
+      "nombre": "pachangas",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "protector solar",
+      "cantidad": 1,
+      "precio": 1600
+    },
+    {
+      "nombre": "medias de marca",
+      "cantidad": 10,
+      "precio": 500
+    },
+    {
+      "nombre": "juego de chor y pulover de mujer",
+      "cantidad": 5,
+      "precio": 4500
+    },
+    {
+      "nombre": "licras anticeluliticas",
+      "cantidad": 2,
+      "precio": 2800
+    },
+    {
+      "nombre": "blusas",
+      "cantidad": 11,
+      "precio": 1500
+    },
+    {
+      "nombre": "juego de cuchillos",
+      "cantidad": 1,
+      "precio": 2800
+    },
+    {
+      "nombre": "juego de cuchillos grande",
+      "cantidad": 1,
+      "precio": 4800
+    },
+    {
+      "nombre": "ajustador",
+      "cantidad": 2,
+      "precio": 1200
+    },
+    {
+      "nombre": "balsamo labial",
+      "cantidad": 12,
+      "precio": 150
+    },
+    {
+      "nombre": "riñonera",
+      "cantidad": 1,
+      "precio": 800
+    },
+    {
+      "nombre": "licras cortas levanta glutes",
+      "cantidad": 3,
+      "precio": 1800
+    },
+    {
+      "nombre": "licras levanta gluteos largas",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "reloj de acero inoxidable",
+      "cantidad": 1,
+      "precio": 1000
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

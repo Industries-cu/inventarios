@@ -1,0 +1,161 @@
+{
+  "inventario": [
+    {
+      "nombre": "juegos de reloj 1 pulsera",
+      "cantidad": 1,
+      "precio": 1100
+    },
+    {
+      "nombre": "perfumes finitos",
+      "cantidad": 2,
+      "precio": 500
+    },
+    {
+      "nombre": "bolbillo con panel",
+      "cantidad": 1,
+      "precio": 2600
+    },
+    {
+      "nombre": "bombillo con pilas intercambiables",
+      "cantidad": 1,
+      "precio": 2600
+    },
+    {
+      "nombre": "audifonos inalambricos",
+      "cantidad": 2,
+      "precio": 2200
+    },
+    {
+      "nombre": "lampara con panel solar",
+      "cantidad": 1,
+      "precio": 5500
+    },
+    {
+      "nombre": "llaveros",
+      "cantidad": 2,
+      "precio": 400
+    },
+    {
+      "nombre": "kit de costura",
+      "cantidad": 1,
+      "precio": 2000
+    },
+    {
+      "nombre": "juegos de maquinita",
+      "cantidad": 4,
+      "precio": 500
+    },
+    {
+      "nombre": "sepillo de diente de niño",
+      "cantidad": 1,
+      "precio": 150
+    },
+    {
+      "nombre": "sombras de ojos",
+      "cantidad": 3,
+      "precio": 1100
+    },
+    {
+      "nombre": "pomos de jel",
+      "cantidad": 2,
+      "precio": 1200
+    },
+    {
+      "nombre": "colonias",
+      "cantidad": 1,
+      "precio": 2300
+    },
+    {
+      "nombre": "cuchillos",
+      "cantidad": 2,
+      "precio": 500
+    },
+    {
+      "nombre": "juegos de portamina",
+      "cantidad": 6,
+      "precio": 700
+    },
+    {
+      "nombre": "pares de media de marca",
+      "cantidad": 5,
+      "precio": 300
+    },
+    {
+      "nombre": "juego de destornillador con llave",
+      "cantidad": 1,
+      "precio": 2200
+    },
+    {
+      "nombre": "juego de destonillador grande con chiquito",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "lapiceros",
+      "cantidad": 3,
+      "precio": 70
+    },
+    {
+      "nombre": "juego de cocina",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "lampara moreka",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "chor de playa",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "juego de cuchillos",
+      "cantidad": 1,
+      "precio": 4200
+    },
+    {
+      "nombre": "piñas de cargador",
+      "cantidad": 1,
+      "precio": 450
+    },
+    {
+      "nombre": "ajustador",
+      "cantidad": 1,
+      "precio": 1000
+    },
+    {
+      "nombre": "monedero",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "pantalon",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "colorcitos",
+      "cantidad": 1,
+      "precio": 150
+    },
+    {
+      "nombre": "luz de vicicleta",
+      "cantidad": 1,
+      "precio": 1200
+    },
+    {
+      "nombre": "cables de telefono",
+      "cantidad": 2,
+      "precio": 400
+    },
+    {
+      "nombre": "adaptador OTG",
+      "cantidad": 1,
+      "precio": 400
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

@@ -1,0 +1,86 @@
+{
+  "inventario": [
+    {
+      "nombre": "medias",
+      "cantidad": 5,
+      "precio": 200
+    },
+    {
+      "nombre": "linterna de cabeza",
+      "cantidad": 6,
+      "precio": 2200
+    },
+    {
+      "nombre": "tacasillos",
+      "cantidad": 3,
+      "precio": 260
+    },
+    {
+      "nombre": "blumes",
+      "cantidad": 13,
+      "precio": 400
+    },
+    {
+      "nombre": "linterna de cabeza grande",
+      "cantidad": 1,
+      "precio": 2600
+    },
+    {
+      "nombre": "zapatillas",
+      "cantidad": 3,
+      "precio": 8000
+    },
+    {
+      "nombre": "EXTENCION",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "tiras led",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "BOLITAS DE CRISTAL DE REGALO",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "protector de voltaje",
+      "cantidad": 3,
+      "precio": 2000
+    },
+    {
+      "nombre": "LICRAS LEVANTA GLUTEOS",
+      "cantidad": 3,
+      "precio": 2400
+    },
+    {
+      "nombre": "LAMPARAS",
+      "cantidad": 2,
+      "precio": 2800
+    },
+    {
+      "nombre": "risador de pelo",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "chort",
+      "cantidad": 3,
+      "precio": 2200
+    },
+    {
+      "nombre": "ajustador",
+      "cantidad": 8,
+      "precio": 1600
+    },
+    {
+      "nombre": "gafas",
+      "cantidad": 4,
+      "precio": 850
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

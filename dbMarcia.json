@@ -1,0 +1,66 @@
+{
+  "inventario": [
+    {
+      "nombre": "protector de voltaje",
+      "cantidad": 1,
+      "precio": 2000
+    },
+    {
+      "nombre": "pilas de litio",
+      "cantidad": 1,
+      "precio": 700
+    },
+    {
+      "nombre": "paquina de pelar",
+      "cantidad": 1,
+      "precio": 3500
+    },
+    {
+      "nombre": "pesa de joyeria",
+      "cantidad": 1,
+      "precio": 2000
+    },
+    {
+      "nombre": "lampara de camping",
+      "cantidad": 1,
+      "precio": 5500
+    },
+    {
+      "nombre": "lampara recargable larga",
+      "cantidad": 2,
+      "precio": 2800
+    },
+    {
+      "nombre": "disco solido",
+      "cantidad": 1,
+      "precio": 10000
+    },
+    {
+      "nombre": "bombillos con panel",
+      "cantidad": 3,
+      "precio": 2600
+    },
+    {
+      "nombre": "vaper",
+      "cantidad": 1,
+      "precio": 5500
+    },
+    {
+      "nombre": "audifonos de un oido",
+      "cantidad": 1,
+      "precio": 1600
+    },
+    {
+      "nombre": "linterna de cabeza de pilas",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "guantes de moto",
+      "cantidad": 1,
+      "precio": 1000
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

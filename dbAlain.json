@@ -1,0 +1,311 @@
+{
+  "inventario": [
+    {
+      "nombre": "pilas de litio de 1200",
+      "cantidad": 2,
+      "precio": 600
+    },
+    {
+      "nombre": "cargadores 1 hora",
+      "cantidad": 1,
+      "precio": 1300
+    },
+    {
+      "nombre": "pilas de litio",
+      "cantidad": 14,
+      "precio": 700
+    },
+    {
+      "nombre": "cables de telefono genericos",
+      "cantidad": 9,
+      "precio": 400
+    },
+    {
+      "nombre": "bombillo de 4 pilas grande con regulacion",
+      "cantidad": 1,
+      "precio": 4500
+    },
+    {
+      "nombre": "bombillo de 3 pilas",
+      "cantidad": 1,
+      "precio": 3500
+    },
+    {
+      "nombre": "protector de voltaje",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "tubo led recargable",
+      "cantidad": 1,
+      "precio": 2800
+    },
+    {
+      "nombre": "linterna de cabeza chiquita",
+      "cantidad": 4,
+      "precio": 2500
+    },
+    {
+      "nombre": "linterna de cabeza mediana",
+      "cantidad": 1,
+      "precio": 2600
+    },
+    {
+      "nombre": "linterna de cabeza grande",
+      "cantidad": 2,
+      "precio": 3000
+    },
+    {
+      "nombre": "bombillo con panel",
+      "cantidad": 4,
+      "precio": 2600
+    },
+    {
+      "nombre": "telefonos",
+      "cantidad": 1,
+      "precio": 4500
+    },
+    {
+      "nombre": "power bank 10 mil",
+      "cantidad": 1,
+      "precio": 5000
+    },
+    {
+      "nombre": "maquina de pelar buenas",
+      "cantidad": 1,
+      "precio": 4000
+    },
+    {
+      "nombre": "p47",
+      "cantidad": 3,
+      "precio": 3500
+    },
+    {
+      "nombre": "piñas sueltas",
+      "cantidad": 1,
+      "precio": 450
+    },
+    {
+      "nombre": "adaptador otg",
+      "cantidad": 5,
+      "precio": 350
+    },
+    {
+      "nombre": "encendedor soplete",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "termometro",
+      "cantidad": 1,
+      "precio": 1100
+    },
+    {
+      "nombre": "lampara redonda con pilas de litio 2",
+      "cantidad": 3,
+      "precio": 2600
+    },
+    {
+      "nombre": "lampara nueva con panel gruesa lampara sin gancho",
+      "cantidad": 3,
+      "precio": 3500
+    },
+    {
+      "nombre": "pasamontañas",
+      "cantidad": 9,
+      "precio": 700
+    },
+    {
+      "nombre": "fosforera con linterna encendedore",
+      "cantidad": 2,
+      "precio": 1500
+    },
+    {
+      "nombre": "juegos de maquinita y peine",
+      "cantidad": 4,
+      "precio": 750
+    },
+    {
+      "nombre": "lampara cara con bombillo",
+      "cantidad": 2,
+      "precio": 7500
+    },
+    {
+      "nombre": "audifonos inalambricos",
+      "cantidad": 4,
+      "precio": 2500
+    },
+    {
+      "nombre": "candado de bicicleta",
+      "cantidad": 1,
+      "precio": 2650
+    },
+    {
+      "nombre": "extenciones",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "bosina triangulo",
+      "cantidad": 1,
+      "precio": 3700
+    },
+    {
+      "nombre": "juego de luces de bicidleta grande",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "termos telmos",
+      "cantidad": 1,
+      "precio": 2600
+    },
+    {
+      "nombre": "luces de bicicle tade pilas chiquita",
+      "cantidad": 2,
+      "precio": 1000
+    },
+    {
+      "nombre": "luces de vicicleta antigua",
+      "cantidad": 1,
+      "precio": 1700
+    },
+    {
+      "nombre": "bosina con microfono",
+      "cantidad": 1,
+      "precio": 5000
+    },
+    {
+      "nombre": "batidora recargable",
+      "cantidad": 1,
+      "precio": 4000
+    },
+    {
+      "nombre": "juego de cuchillos",
+      "cantidad": 1,
+      "precio": 3700
+    },
+    {
+      "nombre": "juego de cuchillo",
+      "cantidad": 1,
+      "precio": 2800
+    },
+    {
+      "nombre": "reloj de pared",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "billeteras",
+      "cantidad": 3,
+      "precio": 1300
+    },
+    {
+      "nombre": "alfombras",
+      "cantidad": 1,
+      "precio": 3000
+    },
+    {
+      "nombre": "mochilas",
+      "cantidad": 1,
+      "precio": 3200
+    },
+    {
+      "nombre": "bolsitos de hombre",
+      "cantidad": 1,
+      "precio": 1800
+    },
+    {
+      "nombre": "pares de medias",
+      "cantidad": 10,
+      "precio": 320
+    },
+    {
+      "nombre": "llaveros",
+      "cantidad": 8,
+      "precio": 700
+    },
+    {
+      "nombre": "cartas",
+      "cantidad": 4,
+      "precio": 1200
+    },
+    {
+      "nombre": "pesas",
+      "cantidad": 2,
+      "precio": 1700
+    },
+    {
+      "nombre": "kit de destornillador",
+      "cantidad": 1,
+      "precio": 4200
+    },
+    {
+      "nombre": "bolso",
+      "cantidad": 3,
+      "precio": 1000
+    },
+    {
+      "nombre": "perfume",
+      "cantidad": 3,
+      "precio": 800
+    },
+    {
+      "nombre": "gafas",
+      "cantidad": 12,
+      "precio": 500
+    },
+    {
+      "nombre": "zapatos de niño zapatillas",
+      "cantidad": 4,
+      "precio": 2500
+    },
+    {
+      "nombre": "zapatos de niño tenis",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "manillas guantes de moto",
+      "cantidad": 2,
+      "precio": 1000
+    },
+    {
+      "nombre": "audifonos de 1 oido",
+      "cantidad": 2,
+      "precio": 1500
+    },
+    {
+      "nombre": "audifonos de cable",
+      "cantidad": 1,
+      "precio": 400
+    },
+    {
+      "nombre": "calculadora cientifica",
+      "cantidad": 2,
+      "precio": 1800
+    },
+    {
+      "nombre": "maus mause",
+      "cantidad": 1,
+      "precio": 1500
+    },
+    {
+      "nombre": "cable nebro 4 en 1",
+      "cantidad": 1,
+      "precio": 700
+    },
+    {
+      "nombre": "bombillo de 2 pilas ",
+      "cantidad": 3,
+      "precio": 2300
+    },
+    {
+      "nombre": "ventilador doble",
+      "cantidad": 1,
+      "precio": 10000
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

@@ -1,0 +1,72 @@
+
+{
+  "inventario": [
+    {
+      "nombre": "proyector de aurora",
+      "cantidad": 2,
+      "precio": 3500
+    },
+    {
+      "nombre": "alarma grande",
+      "cantidad": 1,
+      "precio": 6000
+    },
+    {
+      "nombre": "linterna con aumento mala",
+      "cantidad": 1,
+      "precio": 1600
+    },
+    {
+      "nombre": "maus inalambrico",
+      "cantidad": 1,
+      "precio": 1600
+    },
+    {
+      "nombre": "maus rgb normal",
+      "cantidad": 1,
+      "precio": 1800
+    },
+    {
+      "nombre": "doking",
+      "cantidad": 1,
+      "precio": 1800
+    },
+    {
+      "nombre": "protector de voltaje",
+      "cantidad": 2,
+      "precio": 2000
+    },
+    {
+      "nombre": "pasta termica",
+      "cantidad": 12,
+      "precio": 180
+    },
+    {
+      "nombre": "tiras led",
+      "cantidad": 1,
+      "precio": 2000
+    },
+    {
+      "nombre": "cargador",
+      "cantidad": 1,
+      "precio": 1300
+    },
+    {
+      "nombre": "piñas",
+      "cantidad": 4,
+      "precio": 450
+    },
+    {
+      "nombre": "cargador portatil",
+      "cantidad": 1,
+      "precio": 4800
+    },
+    {
+      "nombre": "linterna de caja verde",
+      "cantidad": 1,
+      "precio": 1800
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

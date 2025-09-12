@@ -1,0 +1,96 @@
+{
+  "inventario": [
+    {
+      "nombre": "bolso de hombre",
+      "cantidad": 2,
+      "precio": 1500
+    },
+    {
+      "nombre": "Enguatada de hombre",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "Juego de mono de mujer",
+      "cantidad": 2,
+      "precio": 5200
+    },
+    {
+      "nombre": "Chancletas de Hombre",
+      "cantidad": 4,
+      "precio": 1500
+    },
+    {
+      "nombre": "Vestido ",
+      "cantidad": 1,
+      "precio": 3700
+    },
+    {
+      "nombre": "Chores de hombre",
+      "cantidad": 5,
+      "precio": 2000
+    },
+    {
+      "nombre": "Tenis",
+      "cantidad": 2,
+      "precio": 8000
+    },
+    {
+      "nombre": "perfumes finos",
+      "cantidad": 3,
+      "precio": 500
+    },
+    {
+      "nombre": "llaveros",
+      "cantidad": 1,
+      "precio": 700
+    },
+    {
+      "nombre": "bombillos",
+      "cantidad": 9,
+      "precio": 300
+    },
+    {
+      "nombre": "licras",
+      "cantidad": 6,
+      "precio": 2000
+    },
+    {
+      "nombre": "blusitas cortas ajustador",
+      "cantidad": 4,
+      "precio": 950
+    },
+    {
+      "nombre": "juego de licra",
+      "cantidad": 6,
+      "precio": 1800
+    },
+    {
+      "nombre": "chaqueta",
+      "cantidad": 1,
+      "precio": 7500
+    },
+    {
+      "nombre": "bestidos",
+      "cantidad": 4,
+      "precio": 3000
+    },
+    {
+      "nombre": "licras largas",
+      "cantidad": 5,
+      "precio": 1800
+    },
+    {
+      "nombre": "saya negra",
+      "cantidad": 1,
+      "precio": 1800
+    },
+    {
+      "nombre": "sayas de colores",
+      "cantidad": 3,
+      "precio": 1500
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}

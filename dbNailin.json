@@ -1,0 +1,82 @@
+
+{
+  "inventario": [
+    {
+      "nombre": "cable de telefono",
+      "cantidad": 1,
+      "precio": 400
+    },
+    {
+      "nombre": "pilas",
+      "cantidad": 2,
+      "precio": 150
+    },
+    {
+      "nombre": "gafas",
+      "cantidad": 3,
+      "precio": 750
+    },
+    {
+      "nombre": "juego de cartas",
+      "cantidad": 1,
+      "precio": 400
+    },
+    {
+      "nombre": "audifonos de cable",
+      "cantidad": 7,
+      "precio": 400
+    },
+    {
+      "nombre": "guantillas",
+      "cantidad": 3,
+      "precio": 1000
+    },
+    {
+      "nombre": "cargador moreka",
+      "cantidad": 1,
+      "precio": 1300
+    },
+    {
+      "nombre": "pares de media",
+      "cantidad": 1,
+      "precio": 200
+    },
+    {
+      "nombre": "licras largas normales",
+      "cantidad": 6,
+      "precio": 2000
+    },
+    {
+      "nombre": "ajustador",
+      "cantidad": 4,
+      "precio": 850
+    },
+    {
+      "nombre": "ajustador",
+      "cantidad": 1,
+      "precio": 850
+    },
+    {
+      "nombre": "pares de medias",
+      "cantidad": 12,
+      "precio": 320
+    },
+    {
+      "nombre": "monos",
+      "cantidad": 1,
+      "precio": 2500
+    },
+    {
+      "nombre": "llaveros",
+      "cantidad": 4,
+      "precio": 700
+    },
+    {
+      "nombre": "pares de medias nike",
+      "cantidad": 6,
+      "precio": 350
+    }
+  ],
+  "registros_entrega": [],
+  "registros_baja": []
+}
